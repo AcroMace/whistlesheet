@@ -1,16 +1,16 @@
-import pyaudio
+import pyaudio # Record/play sound
 import wave    # Sound file read/write
 import os      # To check file existance and deletion
-import time    # For sleep
+import numpy   # Used for FFT
 
 
 # CONFIG
-FORMAT 	 = pyaudio.paInt16	# Mac default is Int24
-CHANNELS = 2				# Mac default
-RATE     = 44100 			# Mac default
+FORMAT 	 = pyaudio.paInt16	# Mac default is Int24 (16 bit signed integer)
+CHANNELS = 2				# Mac default (# of audio channels)
+RATE     = 44100 			# Mac default (Hz, audio samples per second)
 CHUNK    = 1024				# Decrease number to increase frequency detection speed
-RECORD_SECONDS = 5
-WAVE_OUTPUT_FILENAME = 'whistle.wav'
+RECORD_SECONDS = 5			# Number of seconds that are recorded by record()
+WAVE_OUTPUT_FILENAME = 'whistle.wav' # record() will save the audio file as this name
 
 
 def remove_old_file():
@@ -80,6 +80,23 @@ def play():
 	p.terminate()
 
 
+def analyze():
+	# Opens the file saved by record()
+	wf = wave.open(WAVE_OUTPUT_FILENAME, 'rb')
+	# Reads CHUNK amount of frames
+	data = wf.readframes(CHUNK)
+	# Unpacks the data
+	unpacked_data = numpy.array(wave.struct.unpack("%dh"%(len(data)/2), data))
+	# FFT on the unpacked data
+	spectrum = numpy.fft.rfft(unpacked_data, RATE * CHANNELS)
+	# Find the maximum
+	# The max should be approximately accurate enough to map to a note
+	peak = numpy.argmax(abs(spectrum))
+	print peak
+
+
+
 if __name__ == '__main__':
-	record()
-	play()
+	# record()
+	# play()
+	analyze()
