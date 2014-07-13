@@ -268,21 +268,39 @@ def convert_to_lilypond():
 			lily_notes.write('\t' + note)
 			if note != 'r':
 				lily_notes.write(octave_char)
-			if length >= 16:
+			if length >= 64:
+				lily_notes.write('1\n')
+				length -= 64
+			elif length >= 56:
+				lily_notes.write('2..\n')
+				length -= 56
+			elif length >= 48:
+				lily_notes.write('2.\n')
+				length -= 48
+			elif length >= 32:
+				lily_notes.write('2\n')
+				length -= 32
+			# elif length >= 28:
+			# 	lily_notes.write('4..\n')
+			# 	length -= 28
+			elif length >= 24:
+				lily_notes.write('4.\n')
+				length -= 24
+			elif length >= 16:
 				lily_notes.write('4\n')
 				length -= 16
-			elif length >= 14:
-				lily_notes.write('4..\n')
-				length -= 12
+			# elif length >= 14:
+			# 	lily_notes.write('8..\n')
+			# 	length -= 14
 			elif length >= 12:
-				lily_notes.write('4.\n')
-				length -= 12
-			elif length >= 10:
 				lily_notes.write('8.\n')
-				length -= 10
+				length -= 12
 			elif length >= 8:
 				lily_notes.write('8\n')
 				length -= 8
+			# elif length >= 7:
+			# 	lily_notes.write('16..\n')
+			# 	length -= 7
 			elif length >= 6:
 				lily_notes.write('16.\n')
 				length -= 6
@@ -291,10 +309,10 @@ def convert_to_lilypond():
 				length -= 4
 			elif length >= 2:
 				lily_notes.write('16-.\n')
-				length -= 1
+				length -= 2
 			else:
 				length = 0
-	lily_notes.write('\\bar "|."\n}')
+	lily_notes.write('\t\\bar "|."\n}')
 	lily_notes.close()
 
 
