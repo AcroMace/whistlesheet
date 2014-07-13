@@ -1,6 +1,6 @@
 import pyaudio # Record/play sound
 import wave    # Sound file read/write
-import os      # To check file existance and deletion
+import os      # To check file existance and deletion; typeset lilypond
 import numpy   # Used for FFT
 from collections import deque # Lists with fast pops and appends on both sides
 
@@ -9,11 +9,12 @@ FORMAT 	  = pyaudio.paInt16	# Mac default is Int24 (16 bit signed integer)
 CHANNELS  = 2				# Mac default (# of audio channels)
 RATE      = 44100 			# Mac default (Hz, audio samples per second)
 CHUNK     = 1024			# Decrease number to increase frequency detection speed
-RECORD_SECONDS = 5			# Number of seconds that are recorded by record()
+RECORD_SECONDS = 20			# Number of seconds that are recorded by record()
 THRESHOLD = 50000			# Peak needed to be counted as input
 OCTAVE    = 5				# Octave that counts as the fourth octave on the sheet
 BPM       = 135				# Default BPM, affects CHUNK with set_bpm
 WAVE_OUTPUT_FILENAME = 'whistle.wav' # record() will save the audio file as this name
+LILY_OUTPUT_FILENAME = 'lilypond.ly' # convert_to_lilypond() will save the notes as this
 
 
 # Input organized as [frequency, int(|peak|)]
@@ -255,6 +256,7 @@ def convert_octave_to_lilypond(octave):
 def convert_to_lilypond():
 	print('Converting to Lilypond notation')
 	lily_notes = open('lilypond.ly', 'w')
+	lily_notes.write('\\version "2.18.2"\n\n')
 	lily_notes.write('\\header {\n\ttitle = "WhistleSheet Alpha"\n}\n\n')
 	lily_notes.write('\\absolute {\n\t\\clef treble\n')
 	for n in notes_duration_list:
@@ -291,9 +293,15 @@ def convert_to_lilypond():
 				lily_notes.write('16-.\n')
 				length -= 1
 			else:
-				length = 0	
-	lily_notes.write('}')
+				length = 0
+	lily_notes.write('\\bar "|."\n}')
 	lily_notes.close()
+
+
+# Typeset the Lilypond file into a PDF
+def typeset_lilypond():
+	os.system("lilypond --pdf " + LILY_OUTPUT_FILENAME)
+
 
 
 if __name__ == '__main__':
@@ -311,4 +319,5 @@ if __name__ == '__main__':
 	get_duration()
 	# display_notes_with_duration()
 	convert_to_lilypond()
+	typeset_lilypond()
 
