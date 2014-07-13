@@ -11,7 +11,7 @@ RATE      = 44100 			# Mac default (Hz, audio samples per second)
 CHUNK     = 1024			# Decrease number to increase frequency detection speed
 RECORD_SECONDS = 5			# Number of seconds that are recorded by record()
 THRESHOLD = 50000			# Peak needed to be counted as input
-OCTAVE    = 6				# Octave that counts as the fourth octave on the sheet
+OCTAVE    = 5				# Octave that counts as the fourth octave on the sheet
 BPM       = 135				# Default BPM, affects CHUNK with set_bpm
 WAVE_OUTPUT_FILENAME = 'whistle.wav' # record() will save the audio file as this name
 
@@ -238,6 +238,63 @@ def display_notes_with_duration():
 		print ' (' , note[2], ')'
 
 
+# Convert octave number to Lilypond notation
+def convert_octave_to_lilypond(octave):
+	quotes_and_commas = ''
+	while octave != 4:
+		if octave > 4:
+			quotes_and_commas += "'"
+			octave -= 1
+		else:
+			quotes_and_commas += ","
+			octave += 1
+	return quotes_and_commas
+
+
+# Convert notes and duration to Lilypond notation
+def convert_to_lilypond():
+	print('Converting to Lilypond notation')
+	lily_notes = open('lilypond.ly', 'w')
+	lily_notes.write('\\header {\n\ttitle = "WhistleSheet Alpha"\n}\n\n')
+	lily_notes.write('\\absolute {\n\t\\clef treble\n')
+	for n in notes_duration_list:
+		note = n[0]
+		octave = n[1]
+		length = n[2]
+		octave_char = convert_octave_to_lilypond(octave - OCTAVE + 4)
+		while length > 1:
+			lily_notes.write('\t' + note)
+			if note != 'r':
+				lily_notes.write(octave_char)
+			if length >= 16:
+				lily_notes.write('4\n')
+				length -= 16
+			elif length >= 14:
+				lily_notes.write('4..\n')
+				length -= 12
+			elif length >= 12:
+				lily_notes.write('4.\n')
+				length -= 12
+			elif length >= 10:
+				lily_notes.write('8.\n')
+				length -= 10
+			elif length >= 8:
+				lily_notes.write('8\n')
+				length -= 8
+			elif length >= 6:
+				lily_notes.write('16.\n')
+				length -= 6
+			elif length >= 4:
+				lily_notes.write('16\n')
+				length -= 4
+			elif length >= 2:
+				lily_notes.write('16-.\n')
+				length -= 1
+			else:
+				length = 0	
+	lily_notes.write('}')
+	lily_notes.close()
+
 
 if __name__ == '__main__':
 	set_bpm(135)
@@ -252,5 +309,6 @@ if __name__ == '__main__':
 	map_frequencies_to_notes()
 	# display_notes_without_duration()
 	get_duration()
-	display_notes_with_duration()
+	# display_notes_with_duration()
+	convert_to_lilypond()
 
