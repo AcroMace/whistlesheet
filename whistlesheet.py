@@ -17,8 +17,20 @@ WAVE_OUTPUT_FILENAME = 'whistle.wav' # record() will save the audio file as this
 # Input organized as [frequency, int(|peak|)]
 raw_data_list = []
 
-# Input with noise filtered out
+# List of frequencies with random noise filtered out [frequency]
 pruned_data_list = deque([])
+
+# Maximum frequencies needed to be considered a certain note
+# In the form of [frequency, note, octave]
+max_freq_list = []
+
+# Frequencies converted into notes
+# In the form of [note, octave]
+notes_list = []
+
+# Notes with durations
+# In the form of [note, octave, duration]
+notes_duration_list = []
 
 
 # Removes the old recording
@@ -128,15 +140,87 @@ def prune_empty_sounds():
 		if note == 0:
 			notes_to_pop += 1
 		else:
-			break	
+			break
 	for note in range(notes_to_pop):
 		pruned_data_list.popleft()
 
 
-# Dispaly all the frequencies from the pruned list
+# Display all the frequencies from the pruned list
 def display_frequencies():
 	for note in pruned_data_list:
 		print note
+
+
+# Populate the maximum frequencies list
+def populate_max_freq_list():
+	all_notes = ['a', 'bes', 'b', 'c', 'cis', 'd', 'ees', 'e', 'f', 'fis', 'g', 'aes']
+	current_note = 0
+	current_octave = 4
+	current_freq = 440.00 # A4
+	one_note_difference = pow(2.0, 1.0/12.0)
+	current_freq *= pow(2.0, 1.0/24.0) # Half a note higher than A4	
+	while current_freq <= 5000:
+		max_freq_list.append([current_freq, all_notes[current_note], current_octave])
+		current_freq *= one_note_difference
+		current_note += 1
+		if current_note == 3: # note is C
+			current_octave += 1
+		elif current_note == 12: # note is A
+			current_note = 0 # reset to beginning of list
+
+
+# Convert a single frequency to a note
+def map_frequency_to_note(freq):
+	for maximum in max_freq_list:
+		if freq == 0:
+			return ['r', 0] # for rests
+		elif freq < maximum[0]:
+			return [maximum[1], maximum[2]]
+	raise Exception('The input frequency was too high')
+
+
+# Convert the frequencies into notes
+def map_frequencies_to_notes():
+	for freq in pruned_data_list:
+		notes_list.append(map_frequency_to_note(freq))
+
+
+# Print notes without their duration
+def display_notes_without_duration():
+	for note in notes_list:
+		print note[0],
+		print note[1]
+
+# Add duration to the frequencies
+def get_duration():
+	notes_list_length = len(notes_list)
+	current_note = 'n' # placeholder note
+	current_octave = 0
+	current_length = 0
+	for l in range(notes_list_length):
+		note = notes_list[l]
+		next_note = note[0]
+		next_octave = note[1]
+		if (current_note == 'n'):
+			# Initial run
+			current_note = next_note
+			current_octave = next_octave
+			current_length = 1
+		elif (current_note == next_note and current_octave == next_octave):
+			current_length += 1
+		else:
+			notes_duration_list.append([current_note, current_octave, current_length])
+			current_note = next_note
+			current_octave = next_octave
+			current_length = 1
+
+
+# Print notes with their duration
+def display_notes_with_duration():
+	for note in notes_duration_list:
+		print note[0], '\t', note[1],
+		print ' (' , note[2], ')'
+
 
 
 if __name__ == '__main__':
@@ -145,5 +229,10 @@ if __name__ == '__main__':
 	get_frequencies()
 	mute_noise()
 	prune_empty_sounds()
-	display_frequencies()
+	# display_frequencies()
+	populate_max_freq_list()
+	map_frequencies_to_notes()
+	# display_notes_without_duration()
+	get_duration()
+	display_notes_with_duration()
 
