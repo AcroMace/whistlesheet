@@ -2,15 +2,15 @@ import pyaudio # Record/play sound
 import wave    # Sound file read/write
 import os      # To check file existance and deletion
 import numpy   # Used for FFT
-
+from collections import deque # Lists with fast pops and appends on both sides
 
 # CONFIG
 FORMAT 	  = pyaudio.paInt16	# Mac default is Int24 (16 bit signed integer)
 CHANNELS  = 2				# Mac default (# of audio channels)
 RATE      = 44100 			# Mac default (Hz, audio samples per second)
-CHUNK     = 1024				# Decrease number to increase frequency detection speed
+CHUNK     = 1024			# Decrease number to increase frequency detection speed
 RECORD_SECONDS = 5			# Number of seconds that are recorded by record()
-THRESHOLD = 100000			# Peak needed to be counted as input
+THRESHOLD = 50000			# Peak needed to be counted as input
 WAVE_OUTPUT_FILENAME = 'whistle.wav' # record() will save the audio file as this name
 
 
@@ -18,8 +18,10 @@ WAVE_OUTPUT_FILENAME = 'whistle.wav' # record() will save the audio file as this
 raw_data_list = []
 
 # Input with noise filtered out
-pruned_data_list = []
+pruned_data_list = deque([])
 
+
+# Removes the old recording
 def remove_old_file():
 	if os.path.isfile(WAVE_OUTPUT_FILENAME):
 		print('Existing %s detected' % WAVE_OUTPUT_FILENAME)
@@ -30,6 +32,7 @@ def remove_old_file():
 		print('Making a new file')
 
 
+# Records sound
 def record():
 	p = pyaudio.PyAudio()
 	stream = p.open(format=FORMAT,
@@ -64,6 +67,7 @@ def record():
 	print('Finished writing to file')
 
 
+# Plays the recorded sound
 def play():
 	wf = wave.open(WAVE_OUTPUT_FILENAME, 'rb')
 	p = pyaudio.PyAudio()
@@ -87,6 +91,7 @@ def play():
 	p.terminate()
 
 
+# Calculates the frequencies from the recording
 def get_frequencies():
 	# Opens the file saved by record()
 	wf = wave.open(WAVE_OUTPUT_FILENAME, 'rb')
@@ -106,6 +111,7 @@ def get_frequencies():
 	wf.close()
 
 
+# Get rid of all frequencies that are likely not whistling
 def mute_noise():
 	for note in raw_data_list:
 		# Human whistling frequencies range from 500 Hz to 5000 Hz
@@ -113,6 +119,22 @@ def mute_noise():
 			pruned_data_list.append(0)
 		else:
 			pruned_data_list.append(note[0])
+
+
+# Gets rid of all the zeros from the start
+def prune_empty_sounds():
+	notes_to_pop = 0
+	for note in pruned_data_list:
+		if note == 0:
+			notes_to_pop += 1
+		else:
+			break	
+	for note in range(notes_to_pop):
+		pruned_data_list.popleft()
+
+
+# Dispaly all the frequencies from the pruned list
+def display_frequencies():
 	for note in pruned_data_list:
 		print note
 
@@ -122,4 +144,6 @@ if __name__ == '__main__':
 	# play()
 	get_frequencies()
 	mute_noise()
+	prune_empty_sounds()
+	display_frequencies()
 
