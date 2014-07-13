@@ -85,14 +85,18 @@ def analyze():
 	wf = wave.open(WAVE_OUTPUT_FILENAME, 'rb')
 	# Reads CHUNK amount of frames
 	data = wf.readframes(CHUNK)
-	# Unpacks the data
-	unpacked_data = numpy.array(wave.struct.unpack("%dh"%(len(data)/2), data))
-	# FFT on the unpacked data
-	spectrum = numpy.fft.rfft(unpacked_data, RATE * CHANNELS)
-	# Find the maximum
-	# The max should be approximately accurate enough to map to a note
-	peak = numpy.argmax(abs(spectrum))
-	print peak
+	# Honestly not sure why the data length is CHUNK * 4, but this works for now
+	while len(data) == CHUNK * CHANNELS * 2:
+		# Unpacks the data
+		unpacked_data = numpy.array(wave.struct.unpack("%dh"%(len(data)/2), data))
+		# FFT on the unpacked data
+		spectrum = numpy.fft.rfft(unpacked_data, RATE * CHANNELS)
+		# Find the maximum
+		# The max should be approximately accurate enough to map to a note
+		peak = numpy.argmax(abs(spectrum))
+		print peak
+		data = wf.readframes(CHUNK)
+	wf.close()
 
 
 
