@@ -11,6 +11,7 @@ RATE      = 44100 			# Mac default (Hz, audio samples per second)
 CHUNK     = 1024			# Decrease number to increase frequency detection speed
 RECORD_SECONDS = 5			# Number of seconds that are recorded by record()
 THRESHOLD = 50000			# Peak needed to be counted as input
+OCTAVE    = 6				# Octave that counts as the fourth octave on the sheet
 BPM       = 135				# Default BPM, affects CHUNK with set_bpm
 WAVE_OUTPUT_FILENAME = 'whistle.wav' # record() will save the audio file as this name
 
@@ -41,6 +42,11 @@ def set_bpm(bpm=BPM):
 	# (1 min / BPM beats)
 	# (1 beat / 16 points)
 	CHUNK = int(RATE * 60 / BPM / 16)
+
+
+# Changes the octave
+def set_octave(octave=OCTAVE):
+	OCTAVE = octave
 
 
 # Removes the old recording
@@ -234,7 +240,8 @@ def display_notes_with_duration():
 
 
 if __name__ == '__main__':
-	set_bpm
+	set_bpm(135)
+	set_octave(6)
 	# record()
 	# play()
 	get_frequencies()
