@@ -5,13 +5,20 @@ import numpy   # Used for FFT
 
 
 # CONFIG
-FORMAT 	 = pyaudio.paInt16	# Mac default is Int24 (16 bit signed integer)
-CHANNELS = 2				# Mac default (# of audio channels)
-RATE     = 44100 			# Mac default (Hz, audio samples per second)
-CHUNK    = 1024				# Decrease number to increase frequency detection speed
+FORMAT 	  = pyaudio.paInt16	# Mac default is Int24 (16 bit signed integer)
+CHANNELS  = 2				# Mac default (# of audio channels)
+RATE      = 44100 			# Mac default (Hz, audio samples per second)
+CHUNK     = 1024				# Decrease number to increase frequency detection speed
 RECORD_SECONDS = 5			# Number of seconds that are recorded by record()
+THRESHOLD = 100000			# Peak needed to be counted as input
 WAVE_OUTPUT_FILENAME = 'whistle.wav' # record() will save the audio file as this name
 
+
+# Input organized as [frequency, int(|peak|)]
+raw_data_list = []
+
+# Input with noise filtered out
+pruned_data_list = []
 
 def remove_old_file():
 	if os.path.isfile(WAVE_OUTPUT_FILENAME):
@@ -80,7 +87,7 @@ def play():
 	p.terminate()
 
 
-def analyze():
+def get_frequencies():
 	# Opens the file saved by record()
 	wf = wave.open(WAVE_OUTPUT_FILENAME, 'rb')
 	# Reads CHUNK amount of frames
@@ -94,13 +101,25 @@ def analyze():
 		# Find the maximum
 		# The max should be approximately accurate enough to map to a note
 		peak = numpy.argmax(abs(spectrum))
-		print peak
+		raw_data_list.append([peak, int(abs(spectrum[peak]))])
 		data = wf.readframes(CHUNK)
 	wf.close()
 
+
+def mute_noise():
+	for note in raw_data_list:
+		# Human whistling frequencies range from 500 Hz to 5000 Hz
+		if note[0] < 500 or note[0] > 5000 or note[1] < THRESHOLD:
+			pruned_data_list.append(0)
+		else:
+			pruned_data_list.append(note[0])
+	for note in pruned_data_list:
+		print note
 
 
 if __name__ == '__main__':
 	# record()
 	# play()
-	analyze()
+	get_frequencies()
+	mute_noise()
+
