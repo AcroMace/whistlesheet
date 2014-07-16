@@ -15,6 +15,7 @@ OCTAVE    = 5				# Octave that counts as the fourth octave on the sheet
 BPM       = 135				# Default BPM, affects CHUNK with set_bpm
 BOT_FREQ  = 500             # Lowest frequency considered to be whistling
 TOP_FREQ  = 5000            # Highest frequency considered to be whistling
+TOLERANCE = pow(2.0, 1.0/18.0) # max tolerance before being considered another note
 WAVE_OUTPUT_FILENAME = 'whistle.wav' # record() will save the audio file as this name
 LILY_OUTPUT_FILENAME = 'lilypond.ly' # convert_to_lilypond() will save the notes as this
 
@@ -204,6 +205,32 @@ def map_frequencies_to_notes():
 		notes_list.append(map_frequency_to_note(freq))
 
 
+# Convert frequencies into notes with error tolerance
+def map_frequencies_to_notes_with_tolerance():
+	global pruned_data_list
+	pdl       = pruned_data_list
+	pdl_len   = len(pruned_data_list)
+	max_tol   = TOLERANCE
+	cur_avg   = 0 # Average of the current total frequencies
+	cur_tot   = 0 # Total of the current frequencies
+	cur_count = 1 # Number of frequencies currently being considered
+	for i in range(pdl_len):
+		if cur_avg / max_tol < pdl[i] and pdl[i] < cur_avg * max_tol:
+			# Updates the total, count, average
+			cur_tot += pdl[i]
+			cur_count += 1
+			cur_avg = cur_tot / cur_count
+		else:
+			if cur_count != 1:
+				for c in range(cur_count):
+					pdl[i - cur_count + c] = cur_avg
+			cur_avg = pdl[i]
+			cur_tot = pdl[i]
+			cur_count = 1
+	pruned_data_list = pdl
+	map_frequencies_to_notes()
+
+
 # Print notes without their duration
 def display_notes_without_duration():
 	for note in notes_list:
@@ -335,7 +362,8 @@ if __name__ == '__main__':
 	prune_empty_sounds()
 	# display_frequencies()
 	populate_max_freq_list()
-	map_frequencies_to_notes()
+	# map_frequencies_to_notes()
+	map_frequencies_to_notes_with_tolerance()
 	# display_notes_without_duration()
 	get_duration()
 	# display_notes_with_duration()
