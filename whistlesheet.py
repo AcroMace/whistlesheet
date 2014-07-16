@@ -13,6 +13,8 @@ RECORD_SECONDS = 20			# Number of seconds that are recorded by record()
 THRESHOLD = 50000			# Peak needed to be counted as input
 OCTAVE    = 5				# Octave that counts as the fourth octave on the sheet
 BPM       = 135				# Default BPM, affects CHUNK with set_bpm
+BOT_FREQ  = 500             # Lowest frequency considered to be whistling
+TOP_FREQ  = 5000            # Highest frequency considered to be whistling
 WAVE_OUTPUT_FILENAME = 'whistle.wav' # record() will save the audio file as this name
 LILY_OUTPUT_FILENAME = 'lilypond.ly' # convert_to_lilypond() will save the notes as this
 
@@ -144,7 +146,7 @@ def get_frequencies():
 def mute_noise():
 	for note in raw_data_list:
 		# Human whistling frequencies range from 500 Hz to 5000 Hz
-		if note[0] < 500 or note[0] > 5000 or note[1] < THRESHOLD:
+		if note[0] < BOT_FREQ or note[0] > TOP_FREQ or note[1] < THRESHOLD:
 			pruned_data_list.append(0)
 		else:
 			pruned_data_list.append(note[0])
@@ -176,7 +178,7 @@ def populate_max_freq_list():
 	current_freq = 440.00 # A4
 	one_note_difference = pow(2.0, 1.0/12.0)
 	current_freq *= pow(2.0, 1.0/24.0) # Half a note higher than A4	
-	while current_freq <= 5000:
+	while current_freq <= TOP_FREQ:
 		max_freq_list.append([current_freq, all_notes[current_note], current_octave])
 		current_freq *= one_note_difference
 		current_note += 1
@@ -207,6 +209,7 @@ def display_notes_without_duration():
 	for note in notes_list:
 		print note[0],
 		print note[1]
+
 
 # Add duration to the frequencies
 def get_duration():
