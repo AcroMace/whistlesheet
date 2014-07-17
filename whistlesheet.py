@@ -4,20 +4,23 @@ import os      # To check file existance and deletion; typeset lilypond
 import numpy   # Used for FFT
 from collections import deque # Lists with fast pops and appends on both sides
 
+import config  # Config file with all the values
+import debug   # Debug file with list displaying functions
+
 # CONFIG
-FORMAT 	  = pyaudio.paInt16	# Mac default is Int24 (16 bit signed integer)
-CHANNELS  = 2				# Mac default (# of audio channels)
-RATE      = 44100 			# Mac default (Hz, audio samples per second)
-CHUNK     = 1024			# Decrease number to increase frequency detection speed
-RECORD_SECONDS = 20			# Number of seconds that are recorded by record()
-THRESHOLD = 50000			# Peak needed to be counted as input
-OCTAVE    = 5				# Octave that counts as the fourth octave on the sheet
-BPM       = 135				# Default BPM, affects CHUNK with set_bpm
-BOT_FREQ  = 500             # Lowest frequency considered to be whistling
-TOP_FREQ  = 5000            # Highest frequency considered to be whistling
-TOLERANCE = pow(2.0, 1.0/18.0) # max tolerance before being considered another note
-WAVE_OUTPUT_FILENAME = 'whistle.wav' # record() will save the audio file as this name
-LILY_OUTPUT_FILENAME = 'lilypond.ly' # convert_to_lilypond() will save the notes as this
+FORMAT    			 = pyaudio.paInt16
+CHANNELS  			 = config.CHANNELS
+RATE      			 = config.RATE
+CHUNK     			 = config.CHUNK
+RECORD_SECONDS 		 = config.RECORD_SECONDS
+THRESHOLD 			 = config.THRESHOLD
+OCTAVE    			 = config.OCTAVE
+BPM       			 = config.BPM
+BOT_FREQ  			 = config.BOT_FREQ
+TOP_FREQ  			 = config.TOP_FREQ
+TOLERANCE 			 = config.TOLERANCE
+WAVE_OUTPUT_FILENAME = config.WAVE_OUTPUT_FILENAME
+LILY_OUTPUT_FILENAME = config.LILY_OUTPUT_FILENAME
 
 
 # Input organized as [frequency, int(|peak|)]
@@ -165,12 +168,6 @@ def prune_empty_sounds():
 		pruned_data_list.popleft()
 
 
-# Display all the frequencies from the pruned list
-def display_frequencies():
-	for note in pruned_data_list:
-		print note
-
-
 # Populate the maximum frequencies list
 def populate_max_freq_list():
 	all_notes = ['a', 'bes', 'b', 'c', 'cis', 'd', 'ees', 'e', 'f', 'fis', 'g', 'aes']
@@ -231,13 +228,6 @@ def map_frequencies_to_notes_with_tolerance():
 	map_frequencies_to_notes()
 
 
-# Print notes without their duration
-def display_notes_without_duration():
-	for note in notes_list:
-		print note[0],
-		print note[1]
-
-
 # Add duration to the frequencies
 def get_duration():
 	notes_list_length = len(notes_list)
@@ -260,13 +250,6 @@ def get_duration():
 			current_note = next_note
 			current_octave = next_octave
 			current_length = 1
-
-
-# Print notes with their duration
-def display_notes_with_duration():
-	for note in notes_duration_list:
-		print note[0], '\t', note[1],
-		print ' (' , note[2], ')'
 
 
 # Convert octave number to Lilypond notation
@@ -360,13 +343,13 @@ if __name__ == '__main__':
 	get_frequencies()
 	mute_noise()
 	prune_empty_sounds()
-	# display_frequencies()
+	# debug.display_frequencies(pruned_data_list)
 	populate_max_freq_list()
 	# map_frequencies_to_notes()
 	map_frequencies_to_notes_with_tolerance()
-	# display_notes_without_duration()
+	# debug.display_notes_without_duration(notes_list)
 	get_duration()
-	# display_notes_with_duration()
+	# debug.display_notes_with_duration(notes_duration_list)
 	convert_to_lilypond()
 	typeset_lilypond()
 
