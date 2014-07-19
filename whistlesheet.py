@@ -333,23 +333,3 @@ def convert_to_lilypond():
 def typeset_lilypond():
 	os.system("lilypond --pdf " + LILY_OUTPUT_FILENAME)
 
-
-
-if __name__ == '__main__':
-	set_bpm(135)
-	set_octave(6)
-	# record()
-	# play()
-	get_frequencies()
-	mute_noise()
-	prune_empty_sounds()
-	# debug.display_frequencies(pruned_data_list)
-	populate_max_freq_list()
-	# map_frequencies_to_notes()
-	map_frequencies_to_notes_with_tolerance()
-	# debug.display_notes_without_duration(notes_list)
-	get_duration()
-	# debug.display_notes_with_duration(notes_duration_list)
-	convert_to_lilypond()
-	typeset_lilypond()
-
