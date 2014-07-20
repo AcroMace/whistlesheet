@@ -215,7 +215,7 @@ def is_within_tolerance_level(freq1, freq2):
 		return freq1 < (freq2 * max_tol)
 
 
-# Add error tolerance
+# Add error tolerance for frequency variation
 def add_frequency_variation_tolerance():
 	global pruned_data_list
 	pdl       = pruned_data_list
@@ -241,7 +241,7 @@ def add_frequency_variation_tolerance():
 	pruned_data_list = pdl
 
 
-# Add duration to the frequencies
+# Add duration to the notes
 def get_duration():
 	notes_list_length = len(notes_list)
 	current_note = 'n' # placeholder note
@@ -263,6 +263,68 @@ def get_duration():
 			current_note = next_note
 			current_octave = next_octave
 			current_length = 1
+
+
+# Add error tolerance for frame drops
+def add_frame_drop_tolerance():
+	global notes_duration_list
+	ndl        = notes_duration_list
+	ndl.insert(0, ['z', 0, 0]) # To check first item
+	ndl_new    = []  # New notes_duration_list
+	ndl_len    = len(notes_duration_list)
+	max_tol    = 2   # Minimum number of duration required to count as a note
+	for n in range(ndl_len - 2):
+		cur_item   = ndl[n]     # Current item to test
+		next_item  = ndl[n + 1] # Item directly after curent item
+		check_item = ndl[n + 2] # Second item from current item
+		# Skips to the next item if the current note has been overwritten
+		cur_note   = cur_item[0]
+		if cur_note == 'n': continue
+		# Skips to the next item if the next note cannot be overwritten
+		next_length = next_item[2]
+		if next_length > max_tol:
+			ndl_new.append(cur_item)
+			continue
+		# Rest of the definitions required for checks
+		cur_octave   = cur_item[1]
+		cur_length   = cur_item[2]
+		check_note   = check_item[0]
+		check_octave = check_item[1]
+		check_length = check_item[2]
+		# Checking note after the one adjacent to the current one
+		if cur_note == check_note and cur_octave == check_octave:
+			# Combine the current, next, and checked notes
+			ndl_new.append([cur_note, cur_octave, cur_length + next_length + check_length])
+			# Overwrite the next note
+			ndl[n + 1][0] = 'n'
+			# Overwrite the checked note
+			ndl[n + 2][0] = 'n'
+		else:
+			# Combine the current and checked notes
+			ndl_new.append([cur_note, cur_octave, cur_length + next_length])
+			# Overwrite the checked note
+			ndl[n + 1][0] = 'n'
+	del ndl_new[0]
+	notes_duration_list = ndl_new
+
+
+def repeatedly_add_frame_drop_tolerance():
+	length = len(notes_duration_list)
+	while True:
+		i = 1
+		for n in notes_duration_list:
+			i += 1
+			if n[2] < 4:
+				add_frame_drop_tolerance()
+				break
+		length = len(notes_duration_list)
+		if i >= length:
+			break
+
+
+# Round numbers for better formatting
+def add_duration_rounding():
+	print ""
 
 
 # Convert octave number to Lilypond notation
