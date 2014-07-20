@@ -202,8 +202,21 @@ def map_frequencies_to_notes():
 		notes_list.append(map_frequency_to_note(freq))
 
 
-# Convert frequencies into notes with error tolerance
-def map_frequencies_to_notes_with_tolerance():
+# Check if two notes are within frequency tolerance
+# note1: frequency of the first note
+# note2: frequency of the second note
+def is_within_tolerance_level(freq1, freq2):
+	max_tol = TOLERANCE
+	if freq1 == freq2:
+		return True
+	elif freq1 < freq2:
+		return freq2 < (freq1 * max_tol)
+	else:
+		return freq1 < (freq2 * max_tol)
+
+
+# Add error tolerance
+def add_frequency_variation_tolerance():
 	global pruned_data_list
 	pdl       = pruned_data_list
 	pdl_len   = len(pruned_data_list)
@@ -212,12 +225,13 @@ def map_frequencies_to_notes_with_tolerance():
 	cur_tot   = 0 # Total of the current frequencies
 	cur_count = 1 # Number of frequencies currently being considered
 	for i in range(pdl_len):
-		if cur_avg / max_tol < pdl[i] and pdl[i] < cur_avg * max_tol:
+		if is_within_tolerance_level(cur_avg, pdl[i]):
 			# Updates the total, count, average
 			cur_tot += pdl[i]
 			cur_count += 1
 			cur_avg = cur_tot / cur_count
 		else:
+			# Overwrite all notes included in average with average
 			if cur_count != 1:
 				for c in range(cur_count):
 					pdl[i - cur_count + c] = cur_avg
