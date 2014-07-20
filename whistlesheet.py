@@ -324,6 +324,11 @@ def repeatedly_add_frame_drop_tolerance():
 			break
 
 
+# Returns true if a <= b <= c
+def between(a, b, c):
+	return a <= b and b <= c
+
+
 # Round numbers for better formatting
 # May want to precalculate the ranges if pushing to mobile
 # Keeping it this way for now for cleaner code
@@ -331,12 +336,31 @@ def add_duration_rounding():
 	global notes_duration_list
 	for note in notes_duration_list:
 		length = note[2]
-		for i in range(4):
-			rounding = pow(2, i + 2)
-			error    = pow(2, i)
-			if rounding - error <= length and length <= rounding + error:
-				note[2] = pow(2, i + 2)
-
+		if length <= 2:
+			note[2] = 0
+		elif between(3, length, 5):
+			# sixteenth note
+			note[2] = 4
+		elif between(6, length, 10):
+			# eighth note
+			note[2] = 8
+		elif between(11, length, 13):
+			note[2] = 12
+		elif between(14, length, 20):
+			# quarter note
+			note[2] = 16
+		elif between(21, length, 28):
+			# quarter and a half note
+			note[2] = 24
+		elif between(29, length, 40):
+			# half note
+			note[2] = 32
+		elif between(41, length, 56):
+			# half and a half note
+			note[2] = 48
+		elif between(57, length, 72):
+			# whole note
+			note[2] = 64
 
 # Convert octave number to Lilypond notation
 def convert_octave_to_lilypond(octave):
