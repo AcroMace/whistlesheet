@@ -16,11 +16,11 @@ RECORD_SECONDS = 20    # Number of seconds that are recorded by record()
 #
 # Threshold config
 #
-THRESHOLD = 50000              # Peak needed to be counted as input
-BOT_FREQ  = 500                # Lowest frequency considered to be whistling
-TOP_FREQ  = 5000               # Highest frequency considered to be whistling
-TOLERANCE = pow(2.0, 1.0/18.0) # Max tolerance before being considered another note
-
+THRESHOLD      = 50000              # Peak needed to be counted as input
+BOT_FREQ       = 500                # Lowest frequency considered to be whistling
+TOP_FREQ       = 5000               # Highest frequency considered to be whistling
+FREQ_TOLERANCE = pow(2.0, 1.0/18.0) # Max tolerance before being considered another note
+DROP_TOLERANCE = 2                  # Max dropped frames before counting as another note
 
 #
 # Interpretation config

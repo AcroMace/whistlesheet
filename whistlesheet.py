@@ -18,7 +18,8 @@ OCTAVE    			 = config.OCTAVE
 BPM       			 = config.BPM
 BOT_FREQ  			 = config.BOT_FREQ
 TOP_FREQ  			 = config.TOP_FREQ
-TOLERANCE 			 = config.TOLERANCE
+FREQ_TOLERANCE 		 = config.FREQ_TOLERANCE
+DROP_TOLERANCE       = config.DROP_TOLERANCE
 WAVE_OUTPUT_FILENAME = config.WAVE_OUTPUT_FILENAME
 LILY_OUTPUT_FILENAME = config.LILY_OUTPUT_FILENAME
 
@@ -206,7 +207,7 @@ def map_frequencies_to_notes():
 # note1: frequency of the first note
 # note2: frequency of the second note
 def is_within_tolerance_level(freq1, freq2):
-	max_tol = TOLERANCE
+	max_tol = FREQ_TOLERANCE
 	if freq1 == freq2:
 		return True
 	elif freq1 < freq2:
@@ -220,7 +221,6 @@ def add_frequency_variation_tolerance():
 	global pruned_data_list
 	pdl       = pruned_data_list
 	pdl_len   = len(pruned_data_list)
-	max_tol   = TOLERANCE
 	cur_avg   = 0 # Average of the current total frequencies
 	cur_tot   = 0 # Total of the current frequencies
 	cur_count = 1 # Number of frequencies currently being considered
@@ -272,7 +272,8 @@ def add_frame_drop_tolerance():
 	ndl.insert(0, ['z', 0, 0]) # To check first item
 	ndl_new    = []  # New notes_duration_list
 	ndl_len    = len(notes_duration_list)
-	max_tol    = 2   # Minimum number of duration required to count as a note
+	max_tol    = DROP_TOLERANCE # Minimum number of duration required
+	                            # to count as a note
 	for n in range(ndl_len - 2):
 		cur_item   = ndl[n]     # Current item to test
 		next_item  = ndl[n + 1] # Item directly after curent item
@@ -308,13 +309,14 @@ def add_frame_drop_tolerance():
 	notes_duration_list = ndl_new
 
 
+# Repeatedly calls add_frame_drop_tolerance
 def repeatedly_add_frame_drop_tolerance():
 	length = len(notes_duration_list)
 	while True:
 		i = 1
 		for n in notes_duration_list:
 			i += 1
-			if n[2] < 4:
+			if n[2] <= DROP_TOLERANCE:
 				add_frame_drop_tolerance()
 				break
 		length = len(notes_duration_list)
