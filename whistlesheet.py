@@ -325,8 +325,17 @@ def repeatedly_add_frame_drop_tolerance():
 
 
 # Round numbers for better formatting
+# May want to precalculate the ranges if pushing to mobile
+# Keeping it this way for now for cleaner code
 def add_duration_rounding():
-	print ""
+	global notes_duration_list
+	for note in notes_duration_list:
+		length = note[2]
+		for i in range(4):
+			rounding = pow(2, i + 2)
+			error    = pow(2, i)
+			if rounding - error <= length and length <= rounding + error:
+				note[2] = pow(2, i + 2)
 
 
 # Convert octave number to Lilypond notation
@@ -353,7 +362,7 @@ def convert_to_lilypond():
 	for n in notes_duration_list:
 		if current_line_duration > 256:
 			current_line_duration -= 256
-			lily_notes.write('\t\\bar "|" \n')
+			# lily_notes.write('\t\\bar "|" \n')
 		note = n[0]
 		octave = n[1]
 		length = n[2]

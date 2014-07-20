@@ -21,7 +21,7 @@ if __name__ == '__main__':
 	# debug.display_notes_with_duration()
 	ws.repeatedly_add_frame_drop_tolerance()
 	# debug.display_notes_with_duration()
-	# ws.add_duration_rounding()
+	ws.add_duration_rounding()
 	# debug.display_notes_with_duration()
 	ws.convert_to_lilypond()
 	ws.typeset_lilypond()
