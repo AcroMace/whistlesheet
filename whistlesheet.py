@@ -225,7 +225,6 @@ def map_frequencies_to_notes_with_tolerance():
 			cur_tot = pdl[i]
 			cur_count = 1
 	pruned_data_list = pdl
-	map_frequencies_to_notes()
 
 
 # Add duration to the frequencies
