@@ -43,6 +43,10 @@ notes_list = []
 notes_duration_list = []
 
 
+# Changes the amount of seconds to record
+def set_time(time=RECORD_SECONDS):
+	RECORD_SECONDS = time
+
 # Changes the CHUNK size based on the BPM
 def set_bpm(bpm=BPM):
 	# (RATE samples / 1 second)

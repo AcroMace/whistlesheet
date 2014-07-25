@@ -2,6 +2,7 @@ import whistlesheet as ws
 import debug
 
 if __name__ == '__main__':
+	ws.set_time(20)
 	ws.set_bpm(135)
 	ws.set_octave(6)
 	# ws.record()
