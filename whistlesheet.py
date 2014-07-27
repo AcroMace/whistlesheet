@@ -340,11 +340,11 @@ def add_duration_rounding():
 	global notes_duration_list
 	for note in notes_duration_list:
 		length = note[2]
-		if length <= 2:
+		if length <= 5:
 			note[2] = 0
-		elif between(3, length, 5):
-			# sixteenth note
-			note[2] = 4
+		# elif between(3, length, 5):
+		# 	# sixteenth note
+		# 	note[2] = 4
 		elif between(6, length, 10):
 			# eighth note
 			note[2] = 8
