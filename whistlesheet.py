@@ -401,7 +401,7 @@ def convert_to_lilypond():
 				length -= carry_over_length
 				# print "New note length is %d" % length
 				# print "Carrying over %d" % carry_over_length
-			print ""
+			# print ""
 			lily_notes.write('\t' + note)
 			# if note == 'r':
 				# lily_notes.write('\n')
