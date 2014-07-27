@@ -25,7 +25,6 @@ def run_console_version():
 	ws.add_duration_rounding()
 	# debug.display_notes_with_duration()
 	ws.convert_to_lilypond()
-	ws.typeset_lilypond()
 
 if __name__ == '__main__':
 	run_console_version()

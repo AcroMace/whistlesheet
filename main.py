@@ -67,7 +67,6 @@ def do_actual_calculation_stuff():
 	ws.repeatedly_add_frame_drop_tolerance()
 	ws.add_duration_rounding()
 	ws.convert_to_lilypond()
-	ws.typeset_lilypond()
 
 if __name__ == '__main__':
 	WhistleSheetApp().run()
