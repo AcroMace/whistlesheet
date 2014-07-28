@@ -3,6 +3,7 @@ import whistlesheet as ws
 from datetime import datetime as time
 
 from kivy.app import App
+from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.widget import Widget
 from kivy.uix.button import Button
 from kivy.graphics import Color, Line
@@ -15,9 +16,7 @@ class WSBpmBox(Widget):
 	bpm = 0
 
 	def on_touch_down(self, touch):
-		color = (0.5, 1, 1)
-		with self.canvas:
-			Color(*color, mode='hsv')
+		print "BPM button tapped"
 		if self.num_of_taps[0] == 0:
 			self.num_of_taps[0] = 1
 			self.num_of_taps[1] = time.now()
@@ -32,23 +31,32 @@ class WSBpmBox(Widget):
 			print int(self.bpm)
 
 
-# class WSRecordButton(Button):
+class WSRecordButton(Button):
+	def on_press(self):
+		print "Record button pressed"
+		# do_actual_calculation_stuff()	
 
-	# text = "Clear"
+
+class WSProcessButton(Button):
+	def on_press(self):
+		print "Process button pressed"
+		do_actual_calculation_stuff()
+
+
+class WSBpmScreen(Screen):
+	pass
+
+class WSRecordingScreen(Screen):
+	pass
 
 
 class WhistleSheetApp(App):
 
 	def build(self):
-
-		parent = Widget()
-		bpm_box = WSBpmBox()
-		# record_button = WSRecordButton()
-		
-		parent.add_widget(bpm_box)
-		# parent.add_widget(WSRecordButton)
-
-		return parent
+		ws = ScreenManager()
+		ws.add_widget(WSBpmScreen(name='bpm'))
+		ws.add_widget(WSRecordingScreen(name='recording'))
+		return ws
 
 
 def do_actual_calculation_stuff():
@@ -70,4 +78,3 @@ def do_actual_calculation_stuff():
 
 if __name__ == '__main__':
 	WhistleSheetApp().run()
-	do_actual_calculation_stuff()
