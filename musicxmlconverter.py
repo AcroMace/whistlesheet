@@ -52,7 +52,7 @@ def get_music_xml_first_measure_properties(numerator, denominator, bpm):
 	           '\t\t\t\t\t</metronome>\n'
 	           '\t\t\t\t</direction-type>\n'
 	           '\t\t\t\t<sound tempo="%d"/>\n'
-      		   '\t\t\t</direction>')
+      		   '\t\t\t</direction>\n')
 	return measure % (numerator, denominator, bpm, bpm)
 
 
@@ -63,13 +63,13 @@ def get_music_xml_footer():
 
 
 # Convert notes and duration to Lilypond notation
-def convert_to_music_xml(notes_duration_list, OCTAVE):
+def convert_to_music_xml(notes_duration_list, OCTAVE, BPM):
 	ONE_BAR_DURATION = 256
 	current_bar_duration = 0
 	measure = 1
 	wxml = open('whistle.xml', 'w')
-	wxml.write(get_music_xml_header('test title'))
-	wxml.write(get_music_xml_first_measure_properties(4, 4, 144))
+	wxml.write(get_music_xml_header('WhistleSheet Alpha'))
+	wxml.write(get_music_xml_first_measure_properties(4, 4, BPM))
 	for n in notes_duration_list:
 		note = n[0]
 		octave = n[1] - OCTAVE + 4
@@ -94,58 +94,39 @@ def convert_to_music_xml(notes_duration_list, OCTAVE):
 						wxml.write('\t\t\t\t\t<alter>1</alter>\n')
 				wxml.write('\t\t\t\t\t<octave>%d</octave>\n' % octave)
 				wxml.write('\t\t\t\t</pitch>\n')
-			wxml.write('\t\t\t\t<duration>%d</duration>\n' % 64)
-			wxml.write('\t\t\t\t<type>%s</type>\n' % 'quarter')
+			if length > 256:
+				print "Length is greater than to 64"
+				print "This is an error"
+			if length >= 256:
+				print "This should be a full bar"
+				wxml.write('\t\t\t\t<duration>%d</duration>\n' % 256)
+				wxml.write('\t\t\t\t<type>%s</type>\n' % 'whole')
+				current_bar_duration += 256
+				length -= 256
+			elif length >= 128:
+				wxml.write('\t\t\t\t<duration>%d</duration>\n' % 128)
+				wxml.write('\t\t\t\t<type>%s</type>\n' % 'half')
+				current_bar_duration += 128
+				length -= 128
+			elif length >= 64:
+				wxml.write('\t\t\t\t<duration>%d</duration>\n' % 64)
+				wxml.write('\t\t\t\t<type>%s</type>\n' % 'quarter')
+				current_bar_duration += 64
+				length -= 64
+			elif length >= 32:
+				wxml.write('\t\t\t\t<duration>%d</duration>\n' % 32)
+				wxml.write('\t\t\t\t<type>%s</type>\n' % 'eighth')
+				current_bar_duration += 32
+				length -= 32
+			elif length >= 16:
+				wxml.write('\t\t\t\t<duration>%d</duration>\n' % 16)
+				wxml.write('\t\t\t\t<type>%s</type>\n' % '16th')
+				current_bar_duration += 16
+				length -= 16
+			else:
+				print "Length was <16, discarding note"
+				length = 0
 			wxml.write('\t\t\t</note>\n')
-			current_bar_duration += 64
-			length -= 64
-			# if note == 'r':
-				# wxml.write('\n')
-			# if note != 'r':
-			# 	wxml.write(octave_char)
-			# if length > 64:
-			# 	print "Length is greater than to 64"
-			# 	print "This is an error"
-			# if length >= 64:
-			# 	print "This should be a full bar"
-			# 	wxml.write('1\n')
-			# 	current_bar_duration += 64
-			# 	length -= 64
-			# elif length >= 48:
-			# 	wxml.write('2.\n')
-			# 	current_bar_duration += 48
-			# 	length -= 48
-			# elif length >= 32:
-			# 	wxml.write('2\n')
-			# 	current_bar_duration += 32
-			# 	length -= 32
-			# elif length >= 24:
-			# 	lily_notes.write('4.\n')
-			# 	current_bar_duration += 24
-			# 	length -= 24
-			# elif length >= 16:
-			# 	lily_notes.write('4\n')
-			# 	current_bar_duration += 16
-			# 	length -= 16
-			# elif length >= 12:
-			# 	lily_notes.write('8.\n')
-			# 	current_bar_duration += 12
-			# 	length -= 12
-			# elif length >= 8:
-			# 	lily_notes.write('8\n')
-			# 	current_bar_duration += 8
-			# 	length -= 8
-			# elif length >= 6:
-			# 	lily_notes.write('16.\n')
-			# 	current_bar_duration += 6
-			# 	length -= 6
-			# elif length >= 4:
-			# 	lily_notes.write('16\n')
-			# 	current_bar_duration += 4
-			# 	length -= 4
-			# else:
-			# 	print "Length was <4, discarding note"
-			# 	length = 0
 			if carry_over_length > 0:
 				if length == 0:
 					current_bar_duration = 0

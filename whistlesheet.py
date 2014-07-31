@@ -378,5 +378,5 @@ def convert_to_lilypond(typeset=True):
 
 # Convert notes_duration_list to a MusicXML file
 def convert_to_music_xml():
-	mxml.convert_to_music_xml(notes_duration_list, OCTAVE)
+	mxml.convert_to_music_xml(notes_duration_list, OCTAVE, BPM)
 
