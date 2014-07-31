@@ -4,9 +4,10 @@ import os      # To check file existance and deletion
 import numpy   # Used for FFT
 from collections import deque # Lists with fast pops and appends on both sides
 
-import config                # Config file with all the values
-import debug                 # Debug file with list displaying functions
-import lilyconverter as lily # Convert notes_duration_list to a LilyPond file
+import config                    # Config file with all the values
+import debug                     # Debug file with list displaying functions
+import lilyconverter as lily     # Convert notes_duration_list to a LilyPond file
+import musicxmlconverter as mxml # Convert notes_duration_list to a MusicXML file
 
 # CONFIG
 FORMAT    			 = pyaudio.paInt16
@@ -373,3 +374,9 @@ def convert_to_lilypond(typeset=True):
 	lily.convert_to_lilypond(notes_duration_list, OCTAVE)
 	if typeset:
 		lily.typeset_lilypond(LILY_OUTPUT_FILENAME)
+
+
+# Convert notes_duration_list to a MusicXML file
+def convert_to_music_xml():
+	mxml.convert_to_music_xml(notes_duration_list, OCTAVE)
+

@@ -1,4 +1,5 @@
 import whistlesheet as ws
+import musicxmlconverter as mxc
 import debug
 
 def run_console_version():
@@ -24,7 +25,8 @@ def run_console_version():
 	# debug.display_notes_with_duration()
 	ws.add_duration_rounding()
 	# debug.display_notes_with_duration()
-	ws.convert_to_lilypond()
+	# ws.convert_to_lilypond()
+	ws.convert_to_music_xml()
 
 if __name__ == '__main__':
 	run_console_version()
