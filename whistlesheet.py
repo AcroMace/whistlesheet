@@ -5,13 +5,15 @@ import numpy   # Used for FFT
 from collections import deque # Lists with fast pops and appends on both sides
 
 import config                    # Config file with all the values
-import debug                     # Debug file with list displaying functions
 import lilyconverter as lily     # Convert notes_duration_list to a LilyPond file
 import musicxmlconverter as mxml # Convert notes_duration_list to a MusicXML file
 
 class WhistleSheet:
 
 	def __init__(self):
+		self.reset()
+
+	def reset(self):
 		# CONFIG
 		self.FORMAT               = pyaudio.paInt16
 		self.CHANNELS             = config.CHANNELS
@@ -380,4 +382,19 @@ class WhistleSheet:
 	# Convert notes_duration_list to a MusicXML file
 	def convert_to_music_xml(self):
 		mxml.convert_to_music_xml(self.notes_duration_list, self.OCTAVE, self.BPM)
+
+
+	# Take the WAV file and convert it to Lilypond or XML
+	def sheetify(self, type='lilypond', typeset=True):
+		self.get_frequencies()
+		self.mute_noise()
+		self.prune_empty_sounds()
+		self.populate_max_freq_list()
+		self.add_frequency_variation_tolerance()
+		self.map_frequencies_to_notes()
+		self.get_duration()
+		self.add_frame_drop_tolerance()
+		self.repeatedly_add_frame_drop_tolerance()
+		self.add_duration_rounding()
+		self.convert_to_lilypond()
 
