@@ -4,6 +4,7 @@
 #
 
 from os import system # typeset lilypond
+from subprocess import Popen, PIPE
 
 # Convert octave number to Lilypond notation
 def convert_octave_to_lilypond(octave):
@@ -119,4 +120,6 @@ def convert_to_lilypond(notes_duration_list, OCTAVE):
 
 # Typeset the Lilypond file into a PDF
 def typeset_lilypond(LILY_OUTPUT_FILENAME):
-	system("lilypond --pdf " + LILY_OUTPUT_FILENAME)
+	args = ("lilypond", "--pdf", LILY_OUTPUT_FILENAME)
+	popen = Popen(args, stdout=PIPE)
+	popen.wait()
