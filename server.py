@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, make_response
+from flask import Flask, request, render_template, make_response, send_from_directory
 from whistlesheet import WhistleSheet
 app = Flask(__name__)
 
@@ -9,7 +9,7 @@ def get_sheet_music():
 	ws.set_bpm(125)
 	ws.set_octave(5)
 	ws.sheetify()
-	return app.send_static_file('lilypond.pdf')
+	return send_from_directory('output', 'lilypond.pdf')
 
 @app.route("/")
 def hello():
