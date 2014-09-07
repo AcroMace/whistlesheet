@@ -10,7 +10,6 @@
 CHANNELS       = 2     # Mac default (# of audio channels)
 RATE           = 44100 # Mac default (Hz, audio samples per second)
 CHUNK          = 1024  # Decrease number to increase frequency detection speed
-RECORD_SECONDS = 20    # Number of seconds that are recorded by record()
 
 
 #

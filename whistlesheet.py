@@ -1,6 +1,4 @@
-import pyaudio # Record/play sound
 import wave    # Sound file read/write
-import os      # To check file existance and deletion
 import numpy   # Used for FFT
 from collections import deque # Lists with fast pops and appends on both sides
 
@@ -15,11 +13,9 @@ class WhistleSheet:
 
 	def reset(self):
 		# CONFIG
-		self.FORMAT               = pyaudio.paInt16
 		self.CHANNELS             = config.CHANNELS
 		self.RATE                 = config.RATE
 		self.CHUNK                = config.CHUNK
-		self.RECORD_SECONDS       = config.RECORD_SECONDS
 		self.THRESHOLD            = config.THRESHOLD
 		self.OCTAVE               = config.OCTAVE
 		self.BPM                  = config.BPM
@@ -49,10 +45,6 @@ class WhistleSheet:
 		self.notes_duration_list = []
 
 
-	# Changes the amount of seconds to record
-	def set_time(self, time):
-		self.RECORD_SECONDS = time
-
 	# Changes the CHUNK size based on the BPM
 	def set_bpm(self, bpm):
 		# (RATE samples / 1 second)
@@ -61,82 +53,9 @@ class WhistleSheet:
 		# (1 beat / 16 points)
 		self.CHUNK = int(self.RATE * 60 / self.BPM / 16)
 
-
 	# Changes the octave
 	def set_octave(self, octave):
 		self.OCTAVE = octave
-
-
-	# Removes the old recording
-	def remove_old_file(self):
-		file_name = self.WAVE_OUTPUT_FILENAME
-		if os.path.isfile(file_name):
-			print('Existing %s detected' % file_name)
-			print('Deleting previous file')
-			os.remove(file_name)
-		else:
-			print('No previous instance of %s detected' % file_name)
-			print('Making a new file')
-
-
-	# Records sound
-	def record(self):
-		p = pyaudio.PyAudio()
-		stream = p.open(format=self.FORMAT,
-						channels=self.CHANNELS,
-						rate=self.RATE,
-						input=True,
-						frames_per_buffer=self.CHUNK)
-
-		frames = []
-
-		print('Recording started')
-
-		for i in range(int(self.RATE / self.CHUNK * self.RECORD_SECONDS)):
-			data = stream.read(self.CHUNK)
-			frames.append(data)
-
-		stream.stop_stream()
-		stream.close()
-		p.terminate
-
-		print('Recording ended, writing to file')
-
-		self.remove_old_file()
-
-		wf = wave.open(self.WAVE_OUTPUT_FILENAME, 'wb')
-		wf.setnchannels(self.CHANNELS)
-		wf.setsampwidth(p.get_sample_size(self.FORMAT))
-		wf.setframerate(self.RATE)
-		wf.writeframes(''.join(frames))
-		wf.close()
-
-		print('Finished writing to file')
-
-
-	# Plays the recorded sound
-	def play(self):
-		wf = wave.open(self.WAVE_OUTPUT_FILENAME, 'rb')
-		p = pyaudio.PyAudio()
-		stream = p.open(format=self.FORMAT,
-						channels=self.CHANNELS,
-						rate=self.RATE,
-						output=True)
-
-		print('Playing sound')
-
-		data = wf.readframes(self.CHUNK)
-
-		while data != '':
-			stream.write(data)
-			data = wf.readframes(self.CHUNK)
-
-		print('Finished playing sound')
-
-		stream.stop_stream()
-		stream.close()
-		p.terminate()
-
 
 	# Calculates the frequencies from the recording
 	def get_frequencies(self):
@@ -205,7 +124,7 @@ class WhistleSheet:
 				return ['r', 0] # for rests
 			elif freq < maximum[0]:
 				return [maximum[1], maximum[2]]
-		raise Exception('The input frequency was too high')
+		# raise Exception('The input frequency was too high')
 
 
 	# Convert the frequencies into notes

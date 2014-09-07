@@ -1,14 +1,16 @@
 from whistlesheet import WhistleSheet
+from whistlerecorder import WhistleRecorder
 import musicxmlconverter as mxc
 import debug
 
 def run_console_version():
 	ws = WhistleSheet()
+	# wr = WhistleRecorder()
 	ws.set_bpm(125)
-	ws.set_time(20)
+	# wr.set_time(20)
 	ws.set_octave(6)
-	# ws.record()
-	# ws.play()
+	# wr.record()
+	# wr.play()
 	ws.sheetify()
 
 if __name__ == '__main__':
