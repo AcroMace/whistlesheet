@@ -1,7 +1,6 @@
 from whistlesheet import WhistleSheet
 from whistlerecorder import WhistleRecorder
 import musicxmlconverter as mxc
-import debug
 
 def run_console_version():
 	ws = WhistleSheet()
