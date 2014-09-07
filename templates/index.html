@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>WhistleSheet</title>
+    <link href="static/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="static/css/application.css" rel="stylesheet" media="screen">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+  <body>
+    <div class="jumbotron">
+      <h1 id="title">WhistleSheet</h1>
+    </div>
+    <div class="container">
+      <table>
+        <tr><td>BPM</td><td><input type=number value=135 name=bpm></td></tr>
+        <tr><td>Octave</td><td><input type=number value=5 name=octave></td></tr>
+        <tr><td>Audio</td><td><input type="file" accept="audio/*;capture=microphone"></td></tr>
+      </table>
+      <br>
+      <button name="test-button" type="button" class="btn btn-default btn-lg">Test</button>
+    </div>
+    <script type="text/javascript" src="static/js/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="static/js/application.js"></script>
+  </body>
+</html>
