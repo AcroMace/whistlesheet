@@ -120,6 +120,6 @@ def convert_to_lilypond(notes_duration_list, OCTAVE):
 
 # Typeset the Lilypond file into a PDF
 def typeset_lilypond(LILY_OUTPUT_FILENAME):
-	args = ("lilypond", "--pdf", LILY_OUTPUT_FILENAME)
+	args = ("lilypond", "-o", "static", "--pdf", LILY_OUTPUT_FILENAME)
 	popen = Popen(args, stdout=PIPE)
 	popen.wait()
