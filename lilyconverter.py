@@ -22,6 +22,7 @@ def convert_octave_to_lilypond(octave):
 # Convert notes and duration to Lilypond notation
 def convert_to_lilypond(notes_duration_list, OCTAVE):
 	print('Converting to Lilypond notation')
+	ONE_BAR_DURATION = 64
 	current_bar_duration = 0
 	lily_notes = open('lilypond.ly', 'w')
 	lily_notes.write('\\version "2.18.2"\n\n')
@@ -36,8 +37,8 @@ def convert_to_lilypond(notes_duration_list, OCTAVE):
 			# print "Current bar length is %d" % current_bar_duration
 			# print "Note length is %d" % length
 			carry_over_length = 0
-			if current_bar_duration + length > 64:
-				carry_over_length = length - (64 - current_bar_duration)
+			if current_bar_duration + length > ONE_BAR_DURATION:
+				carry_over_length = length - (ONE_BAR_DURATION - current_bar_duration)
 				length -= carry_over_length
 				# print "New note length is %d" % length
 				# print "Carrying over %d" % carry_over_length
@@ -114,6 +115,9 @@ def convert_to_lilypond(notes_duration_list, OCTAVE):
 					lily_notes.write('\t\\bar "|" \n')
 				length += carry_over_length
 				carry_over_length = 0
+			elif current_bar_duration == ONE_BAR_DURATION:
+				current_bar_duration = 0
+				lily_notes.write('\t\\bar "|" \n')
 	lily_notes.write('\t\\bar "|."\n}')
 	lily_notes.close()
 

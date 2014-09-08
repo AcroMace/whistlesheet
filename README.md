@@ -12,4 +12,4 @@ Turns whistles into sheet music
 
 
 **Note**:
-Must have a `/static` folder for PDF output.
+Must have a `/output` folder for PDF output.
