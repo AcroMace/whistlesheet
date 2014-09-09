@@ -26,10 +26,3 @@ DROP_TOLERANCE = 2                  # Max dropped frames before counting as anot
 #
 OCTAVE    = 6   # Octave that counts as the fourth octave on the sheet
 BPM       = 135 # Default BPM, affects CHUNK with set_bpm()
-
-
-#
-# Output config
-#
-WAVE_OUTPUT_FILENAME = 'whistle.wav' # record() will save the audio file as this name
-LILY_OUTPUT_FILENAME = 'lilypond.ly' # convert_to_lilypond() will save the notes as this

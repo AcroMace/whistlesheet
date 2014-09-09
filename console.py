@@ -1,9 +1,11 @@
 from whistlesheet import WhistleSheet
 from whistlerecorder import WhistleRecorder
 import musicxmlconverter as mxc
+from sys import argv
 
-def run_console_version():
-	ws = WhistleSheet()
+
+def run_console_version(filename):
+	ws = WhistleSheet(filename)
 	# wr = WhistleRecorder()
 	ws.set_bpm(125)
 	# wr.set_time(20)
@@ -13,4 +15,8 @@ def run_console_version():
 	ws.sheetify()
 
 if __name__ == '__main__':
-	run_console_version()
+	arguments = argv[1:]
+	if arguments:
+		run_console_version(arguments[0])
+	else:
+		raise Exception("Please provide the name of the WAV file as an argument")

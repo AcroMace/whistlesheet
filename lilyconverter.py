@@ -3,8 +3,9 @@
 # WhistleSheet LilyPond Converter
 #
 
-from os import system # typeset lilypond
+
 from subprocess import Popen, PIPE
+from os import remove
 
 # Convert octave number to Lilypond notation
 def convert_octave_to_lilypond(octave):
@@ -20,11 +21,11 @@ def convert_octave_to_lilypond(octave):
 
 
 # Convert notes and duration to Lilypond notation
-def convert_to_lilypond(notes_duration_list, OCTAVE):
+def convert_to_lilypond(notes_duration_list, SONG_ID, OCTAVE):
 	print('Converting to Lilypond notation')
 	ONE_BAR_DURATION = 64
 	current_bar_duration = 0
-	lily_notes = open('lilypond.ly', 'w')
+	lily_notes = open('output/%s.ly' % SONG_ID, 'w')
 	lily_notes.write('\\version "2.18.2"\n\n')
 	lily_notes.write('\\header {\n\ttitle = "WhistleSheet Alpha"\n}\n\n')
 	lily_notes.write('\\absolute {\n\t\\clef treble\n')
@@ -123,7 +124,8 @@ def convert_to_lilypond(notes_duration_list, OCTAVE):
 
 
 # Typeset the Lilypond file into a PDF
-def typeset_lilypond(LILY_OUTPUT_FILENAME):
-	args = ("lilypond", "-o", "output", "--pdf", LILY_OUTPUT_FILENAME)
+def typeset_lilypond(SONG_ID):
+	args = ("lilypond", "-o", "output", 'output/%s.ly' % SONG_ID)
 	popen = Popen(args, stdout=PIPE)
 	popen.wait()
+	remove('output/%s.ly' % SONG_ID)

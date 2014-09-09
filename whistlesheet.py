@@ -8,10 +8,10 @@ import musicxmlconverter as mxml # Convert notes_duration_list to a MusicXML fil
 
 class WhistleSheet:
 
-	def __init__(self):
-		self.reset()
+	def __init__(self, song_id):
+		self.reset(song_id)
 
-	def reset(self):
+	def reset(self, song_id):
 		# CONFIG
 		self.CHANNELS             = config.CHANNELS
 		self.RATE                 = config.RATE
@@ -23,8 +23,7 @@ class WhistleSheet:
 		self.TOP_FREQ             = config.TOP_FREQ
 		self.FREQ_TOLERANCE       = config.FREQ_TOLERANCE
 		self.DROP_TOLERANCE       = config.DROP_TOLERANCE
-		self.WAVE_OUTPUT_FILENAME = config.WAVE_OUTPUT_FILENAME
-		self.LILY_OUTPUT_FILENAME = config.LILY_OUTPUT_FILENAME
+		self.SONG_ID              = song_id
 
 		# Input organized as [frequency, int(|peak|)]
 		self.raw_data_list = []
@@ -60,7 +59,7 @@ class WhistleSheet:
 	# Calculates the frequencies from the recording
 	def get_frequencies(self):
 		# Opens the file saved by record()
-		wf = wave.open(self.WAVE_OUTPUT_FILENAME, 'rb')
+		wf = wave.open('input/%s.wav' % self.SONG_ID, 'rb')
 		# Reads CHUNK amount of frames
 		data = wf.readframes(self.CHUNK)
 		# Honestly not sure why the data length is CHUNK * 4, but this works for now
@@ -293,14 +292,14 @@ class WhistleSheet:
 
 	# Convert notes_duration_list to a LilyPond file
 	def convert_to_lilypond(self, typeset=True):
-		lily.convert_to_lilypond(self.notes_duration_list, self.OCTAVE)
+		lily.convert_to_lilypond(self.notes_duration_list, self.SONG_ID, self.OCTAVE)
 		if typeset:
-			lily.typeset_lilypond(self.LILY_OUTPUT_FILENAME)
+			lily.typeset_lilypond(self.SONG_ID)
 
 
 	# Convert notes_duration_list to a MusicXML file
 	def convert_to_music_xml(self):
-		mxml.convert_to_music_xml(self.notes_duration_list, self.OCTAVE, self.BPM)
+		mxml.convert_to_music_xml(self.notes_duration_list, self.SONG_ID, self.OCTAVE, self.BPM)
 
 
 	# Take the WAV file and convert it to Lilypond or XML
@@ -315,5 +314,5 @@ class WhistleSheet:
 		self.add_frame_drop_tolerance()
 		self.repeatedly_add_frame_drop_tolerance()
 		self.add_duration_rounding()
-		self.convert_to_lilypond()
-
+		# self.convert_to_lilypond()
+		self.convert_to_music_xml()

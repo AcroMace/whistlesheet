@@ -3,8 +3,6 @@
 # WhistleSheet MusicXML Converter
 #
 
-from os import system
-
 
 def get_music_xml_header(title):
 	header = ('<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n'
@@ -63,11 +61,12 @@ def get_music_xml_footer():
 
 
 # Convert notes and duration to Lilypond notation
-def convert_to_music_xml(notes_duration_list, OCTAVE, BPM):
+def convert_to_music_xml(notes_duration_list, SONG_ID, OCTAVE, BPM):
 	ONE_BAR_DURATION = 256
 	current_bar_duration = 0
 	measure = 1
-	wxml = open('whistle.xml', 'w')
+	# NEED TO SUPPORT SONG_ID
+	wxml = open('output/%s.xml' % SONG_ID, 'w')
 	wxml.write(get_music_xml_header('WhistleSheet Alpha'))
 	wxml.write(get_music_xml_first_measure_properties(4, 4, BPM))
 	for n in notes_duration_list:
@@ -147,5 +146,3 @@ def convert_to_music_xml(notes_duration_list, OCTAVE, BPM):
 	wxml.write('\t\t\t</barline>\n\t\t</measure>\n')
 	wxml.write(get_music_xml_footer())
 	wxml.close()
-
-

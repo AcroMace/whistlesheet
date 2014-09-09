@@ -7,7 +7,7 @@ import config  # Config file with all the values
 class WhistleRecorder:
 
 	# time: Time to record in seconds
-	def __init__(self, time=20, name=config.WAVE_OUTPUT_FILENAME):
+	def __init__(self, time=20, name='whistle.wav'):
 		self.FORMAT   = pyaudio.paInt16
 		self.CHANNELS = config.CHANNELS
 		self.RATE     = config.RATE
@@ -15,8 +15,8 @@ class WhistleRecorder:
 		self.reset(time, name)
 
 	def reset(self, time, name):
-		self.RECORD_SECONDS       = time
-		self.WAVE_OUTPUT_FILENAME = name
+		self.RECORD_SECONDS  = time
+		self.OUTPUT_FILENAME = name
 
 	# Changes the amount of seconds to record
 	def set_time(self, time):
@@ -24,11 +24,11 @@ class WhistleRecorder:
 
 	# Changes the output name
 	def set_output(self, name):
-		self.WAVE_OUTPUT_FILENAME = name
+		self.OUTPUT_FILENAME = name
 
 	# Removes the old recording
 	def remove_old_file(self):
-		file_name = self.WAVE_OUTPUT_FILENAME
+		file_name = self.OUTPUT_FILENAME
 		if os.path.isfile(file_name):
 			print('Existing %s detected' % file_name)
 			print('Deleting previous file')
@@ -62,7 +62,7 @@ class WhistleRecorder:
 
 		self.remove_old_file()
 
-		wf = wave.open(self.WAVE_OUTPUT_FILENAME, 'wb')
+		wf = wave.open(self.OUTPUT_FILENAME, 'wb')
 		wf.setnchannels(self.CHANNELS)
 		wf.setsampwidth(p.get_sample_size(self.FORMAT))
 		wf.setframerate(self.RATE)
@@ -74,7 +74,7 @@ class WhistleRecorder:
 
 	# Plays the recorded sound
 	def play(self):
-		wf = wave.open(self.WAVE_OUTPUT_FILENAME, 'rb')
+		wf = wave.open(self.OUTPUT_FILENAME, 'rb')
 		p = pyaudio.PyAudio()
 		stream = p.open(format=self.FORMAT,
 						channels=self.CHANNELS,
