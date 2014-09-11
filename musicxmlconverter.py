@@ -4,6 +4,9 @@
 #
 
 
+from os import path
+
+
 def get_music_xml_header(title):
 	header = ('<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n'
 			  '<!DOCTYPE score-partwise PUBLIC\n'
@@ -66,7 +69,7 @@ def convert_to_music_xml(notes_duration_list, SONG_ID, OCTAVE, BPM):
 	current_bar_duration = 0
 	measure = 1
 	# NEED TO SUPPORT SONG_ID
-	wxml = open('output/%s.xml' % SONG_ID, 'w')
+	wxml = open(path.join('output', '%s.xml' % SONG_ID), 'w')
 	wxml.write(get_music_xml_header('WhistleSheet Alpha'))
 	wxml.write(get_music_xml_first_measure_properties(4, 4, BPM))
 	for n in notes_duration_list:

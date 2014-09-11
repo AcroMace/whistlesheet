@@ -7,7 +7,7 @@ from random import randint
 
 app = Flask(__name__)
 app.config['OUTPUT_FOLDER'] = 'output'
-app.config['UPLOAD_FOLDER'] = 'input'
+app.config['INPUT_FOLDER']  = 'input'
 
 
 # Make the directory if the directory does not already exist
@@ -21,7 +21,7 @@ def make_directory(name):
 # directory parameter as the file name otherwise
 def setup_directories():
 	make_directory(app.config['OUTPUT_FOLDER'])
-	make_directory(app.config['UPLOAD_FOLDER'])
+	make_directory(app.config['INPUT_FOLDER'])
 
 # Makes sure that the file sent is a WAV file
 # For "file.name.wav" returns ["file.name", "wav"]
@@ -35,7 +35,7 @@ def home():
 		file = request.files['file']
 		if file and is_wav_file(file.filename):
 			filename = str(randint(0, 100000000))
-			file.save(os.path.join(app.config['UPLOAD_FOLDER'], '%s.wav' % filename))
+			file.save(os.path.join(app.config['INPUT_FOLDER'], '%s.wav' % filename))
 			ws = WhistleSheet(filename)
 			ws.set_bpm(125)
 			ws.set_octave(5)

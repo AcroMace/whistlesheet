@@ -1,6 +1,7 @@
 import wave    # Sound file read/write
 import numpy   # Used for FFT
 from collections import deque # Lists with fast pops and appends on both sides
+from os import path # File paths with Windows support
 
 import config                    # Config file with all the values
 import lilyconverter as lily     # Convert notes_duration_list to a LilyPond file
@@ -9,6 +10,8 @@ import musicxmlconverter as mxml # Convert notes_duration_list to a MusicXML fil
 class WhistleSheet:
 
 	def __init__(self, song_id):
+		self.INPUT_FOLDER  = 'input'
+		# self.OUTPUT_FOLDER = 'output'
 		self.reset(song_id)
 
 	def reset(self, song_id):
@@ -59,7 +62,7 @@ class WhistleSheet:
 	# Calculates the frequencies from the recording
 	def get_frequencies(self):
 		# Opens the file saved by record()
-		wf = wave.open('input/%s.wav' % self.SONG_ID, 'rb')
+		wf = wave.open(path.join(self.INPUT_FOLDER, '%s.wav' % self.SONG_ID), 'rb')
 		# Reads CHUNK amount of frames
 		data = wf.readframes(self.CHUNK)
 		# Honestly not sure why the data length is CHUNK * 4, but this works for now
