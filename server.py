@@ -4,22 +4,33 @@ from flask import (Flask, request, redirect, render_template, make_response,
 from whistlesheet import WhistleSheet
 from random import randint
 
-OUTPUT_FOLDER = 'output'
-UPLOAD_FOLDER = 'input'
-
 
 app = Flask(__name__)
-app.config['OUTPUT_FOLDER'] = OUTPUT_FOLDER
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['OUTPUT_FOLDER'] = 'output'
+app.config['UPLOAD_FOLDER'] = 'input'
 
 
+# Make the directory if the directory does not already exist
+#   name: name of the directory as a String
+def make_directory(name):
+	if not os.path.exists(name):
+		os.makedirs(name)
+
+# Used to make the input and output folders as the Lilypond binary
+# only navigates to the folder if it exists and uses the
+# directory parameter as the file name otherwise
+def setup_directories():
+	make_directory(app.config['OUTPUT_FOLDER'])
+	make_directory(app.config['UPLOAD_FOLDER'])
+
+# Makes sure that the file sent is a WAV file
+# For "file.name.wav" returns ["file.name", "wav"]
 def is_wav_file(filename):
-	# For "file.name.wav" returns ["file.name", "wav"]
 	return '.' in filename and filename.rsplit('.', 1)[1] == 'wav'
 
 
 @app.route("/", methods=['GET', 'POST'])
-def hello():
+def home():
 	if request.method == 'POST':
 		file = request.files['file']
 		if file and is_wav_file(file.filename):
@@ -34,4 +45,5 @@ def hello():
 
 
 if __name__ == '__main__':
+	setup_directories()
 	app.run()
