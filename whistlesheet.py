@@ -314,5 +314,5 @@ class WhistleSheet:
 		self.add_frame_drop_tolerance()
 		self.repeatedly_add_frame_drop_tolerance()
 		self.add_duration_rounding()
-		# self.convert_to_lilypond()
-		self.convert_to_music_xml()
+		self.convert_to_lilypond()
+		# self.convert_to_music_xml()
