@@ -26,3 +26,8 @@ DROP_TOLERANCE = 2                  # Max dropped frames before counting as anot
 #
 OCTAVE    = 6   # Octave that counts as the fourth octave on the sheet
 BPM       = 135 # Default BPM, affects CHUNK with set_bpm()
+
+#
+# Output config
+#
+DEFAULT_TITLE = 'WhistleSheet' # Title of the song for the output

@@ -41,12 +41,16 @@ def home():
 		file = request.files['song']
 		print("Received data: %s" % request.form)
 		if file and is_wav_file(file.filename):
+			title = request.form['title']
 			filename = str(randint(0, 100000000))
 			file.save(os.path.join(app.config['INPUT_FOLDER'], '%s.wav' % filename))
 			ws = WhistleSheet(filename)
 			ws.set_bpm(125)
 			ws.set_octave(5)
-			ws.sheetify()
+			if title: ws.set_title(title)
+			try:
+				ws.sheetify()
+			except Exception, e: print "\nERROR: %s\n" % str(e)
 			return filename
 		return "Invalid request"
 	return render_template('index.html')

@@ -22,6 +22,7 @@ class WhistleSheet:
 		self.THRESHOLD            = config.THRESHOLD
 		self.OCTAVE               = config.OCTAVE
 		self.BPM                  = config.BPM
+		self.TITLE                = config.DEFAULT_TITLE
 		self.BOT_FREQ             = config.BOT_FREQ
 		self.TOP_FREQ             = config.TOP_FREQ
 		self.FREQ_TOLERANCE       = config.FREQ_TOLERANCE
@@ -58,6 +59,10 @@ class WhistleSheet:
 	# Changes the octave
 	def set_octave(self, octave):
 		self.OCTAVE = octave
+
+	# Changes the title of the song (for output)
+	def set_title(self, title):
+		self.TITLE = title
 
 	# Calculates the frequencies from the recording
 	def get_frequencies(self):
@@ -295,14 +300,14 @@ class WhistleSheet:
 
 	# Convert notes_duration_list to a LilyPond file
 	def convert_to_lilypond(self, typeset=True):
-		lily.convert_to_lilypond(self.notes_duration_list, self.SONG_ID, self.OCTAVE)
+		lily.convert_to_lilypond(self.notes_duration_list, self.SONG_ID, self.TITLE, self.OCTAVE)
 		if typeset:
 			lily.typeset_lilypond(self.SONG_ID)
 
 
 	# Convert notes_duration_list to a MusicXML file
 	def convert_to_music_xml(self):
-		mxml.convert_to_music_xml(self.notes_duration_list, self.SONG_ID, self.OCTAVE, self.BPM)
+		mxml.convert_to_music_xml(self.notes_duration_list, self.SONG_ID, self.TITLE, self.OCTAVE, self.BPM)
 
 
 	# Take the WAV file and convert it to Lilypond or XML

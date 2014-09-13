@@ -64,13 +64,13 @@ def get_music_xml_footer():
 
 
 # Convert notes and duration to Lilypond notation
-def convert_to_music_xml(notes_duration_list, SONG_ID, OCTAVE, BPM):
+def convert_to_music_xml(notes_duration_list, SONG_ID, SONG_TITLE, OCTAVE, BPM):
 	ONE_BAR_DURATION = 256
 	current_bar_duration = 0
 	measure = 1
 	# NEED TO SUPPORT SONG_ID
 	wxml = open(path.join('output', '%s.xml' % SONG_ID), 'w')
-	wxml.write(get_music_xml_header('WhistleSheet Alpha'))
+	wxml.write(get_music_xml_header(SONG_TITLE))
 	wxml.write(get_music_xml_first_measure_properties(4, 4, BPM))
 	for n in notes_duration_list:
 		note = n[0]

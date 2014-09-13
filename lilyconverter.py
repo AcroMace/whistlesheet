@@ -22,13 +22,13 @@ def convert_octave_to_lilypond(octave):
 
 
 # Convert notes and duration to Lilypond notation
-def convert_to_lilypond(notes_duration_list, SONG_ID, OCTAVE):
+def convert_to_lilypond(notes_duration_list, SONG_ID, SONG_TITLE, OCTAVE):
 	print('Converting to Lilypond notation')
 	ONE_BAR_DURATION = 64
 	current_bar_duration = 0
 	lily_notes = open(path.join('output', '%s.ly' % SONG_ID), 'w')
 	lily_notes.write('\\version "2.18.2"\n\n')
-	lily_notes.write('\\header {\n\ttitle = "WhistleSheet Alpha"\n}\n\n')
+	lily_notes.write('\\header {\n\ttitle = "%s"\n}\n\n' % SONG_TITLE)
 	lily_notes.write('\\absolute {\n\t\\clef treble\n')
 	for n in notes_duration_list:
 		note = n[0]
