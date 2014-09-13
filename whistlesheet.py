@@ -23,6 +23,7 @@ class WhistleSheet:
 		self.OCTAVE               = config.OCTAVE
 		self.BPM                  = config.BPM
 		self.TITLE                = config.DEFAULT_TITLE
+		self.COMPOSER             = config.DEFAULT_COMPOSER
 		self.BOT_FREQ             = config.BOT_FREQ
 		self.TOP_FREQ             = config.TOP_FREQ
 		self.FREQ_TOLERANCE       = config.FREQ_TOLERANCE
@@ -54,6 +55,18 @@ class WhistleSheet:
 		# (60 seconds / 1 min)
 		# (1 min / BPM beats)
 		# (1 beat / 16 points)
+		if type(bpm) is unicode or type(bpm) is str:
+			# BPM is sent as a string by the server
+			try:
+				int_bpm = int(bpm)
+			except ValueError:
+				# Reject value if it can't be converted to an integer
+				return
+		elif type(bpm) is int:
+			int_bpm = bpm
+		else:
+			raise Exception("BPM must be a unicode/str or an int")
+		self.BPM = int_bpm
 		self.CHUNK = int(self.RATE * 60 / self.BPM / 16)
 
 	# Changes the octave
@@ -63,6 +76,10 @@ class WhistleSheet:
 	# Changes the title of the song (for output)
 	def set_title(self, title):
 		self.TITLE = title
+
+	# Changes the composer of the song
+	def set_composer(self, composer):
+		self.COMPOSER = composer
 
 	# Calculates the frequencies from the recording
 	def get_frequencies(self):
@@ -300,7 +317,7 @@ class WhistleSheet:
 
 	# Convert notes_duration_list to a LilyPond file
 	def convert_to_lilypond(self, typeset=True):
-		lily.convert_to_lilypond(self.notes_duration_list, self.SONG_ID, self.TITLE, self.OCTAVE)
+		lily.convert_to_lilypond(self.notes_duration_list, self.SONG_ID, self.TITLE, self.COMPOSER, self.BPM, self.OCTAVE)
 		if typeset:
 			lily.typeset_lilypond(self.SONG_ID)
 

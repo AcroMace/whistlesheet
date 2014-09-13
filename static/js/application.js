@@ -30,7 +30,11 @@ function sheetify() {
 function makeFormData(blob) {
 	var fd = new FormData();
 	var title = getValueFromInput('#input-title', 'My Masterpiece');
+	var composer = getValueFromInput('#input-composer', 'Beethoven');
+	var bpm = getValueFromInput('#input-bpm', '135');
 	fd.append('title', title);
+	fd.append('composer', composer);
+	fd.append('bpm', bpm);
 	fd.append('song', blob, 'whistle.wav');
 	return fd;
 }

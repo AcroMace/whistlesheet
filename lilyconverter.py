@@ -22,14 +22,15 @@ def convert_octave_to_lilypond(octave):
 
 
 # Convert notes and duration to Lilypond notation
-def convert_to_lilypond(notes_duration_list, SONG_ID, SONG_TITLE, OCTAVE):
+def convert_to_lilypond(notes_duration_list, SONG_ID, SONG_TITLE, SONG_COMPOSER, BPM, OCTAVE):
 	print('Converting to Lilypond notation')
 	ONE_BAR_DURATION = 64
 	current_bar_duration = 0
 	lily_notes = open(path.join('output', '%s.ly' % SONG_ID), 'w')
 	lily_notes.write('\\version "2.18.2"\n\n')
-	lily_notes.write('\\header {\n\ttitle = "%s"\n\ttagline = ""\n}\n\n' % SONG_TITLE)
-	lily_notes.write('\\absolute {\n\t\\clef treble\n')
+	lily_notes.write('\\pointAndClickOff\n')
+	lily_notes.write('\\header {\n\ttitle = "%s"\n\ttagline = ""\n\tcomposer = "%s"\n}\n\n' % (SONG_TITLE, SONG_COMPOSER))
+	lily_notes.write('\\absolute {\n\t\\clef treble\n\t\\tempo 4 = %d\n' % BPM)
 	for n in notes_duration_list:
 		note = n[0]
 		octave = n[1]
@@ -54,7 +55,6 @@ def convert_to_lilypond(notes_duration_list, SONG_ID, SONG_TITLE, OCTAVE):
 				print "Length is greater than to 64"
 				print "This is an error"
 			if length >= 64:
-				print "This should be a full bar"
 				lily_notes.write('1\n')
 				current_bar_duration += 64
 				length -= 64

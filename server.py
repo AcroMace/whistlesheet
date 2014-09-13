@@ -54,13 +54,13 @@ def home():
 		file = request.files['song']
 		print("Received data: %s" % request.form)
 		if file and is_wav_file(file.filename):
-			title, bpm = get_form_values(request, ('title', 'bpm'))
+			title, composer, bpm = get_form_values(request, ('title', 'composer', 'bpm'))
 			filename = str(randint(0, 100000000))
 			file.save(os.path.join(app.config['INPUT_FOLDER'], '%s.wav' % filename))
 			ws = WhistleSheet(filename)
-			ws.set_bpm(125)
-			ws.set_octave(5)
 			if title: ws.set_title(title)
+			if composer: ws.set_composer(composer)
+			if bpm: ws.set_bpm(bpm) # automatically converted to int
 			try:
 				ws.sheetify()
 			except Exception, e: print "\nERROR: %s\n" % str(e)
