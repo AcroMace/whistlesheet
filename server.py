@@ -28,6 +28,19 @@ def setup_directories():
 def is_wav_file(filename):
 	return '.' in filename and filename.rsplit('.', 1)[1] == 'wav'
 
+# Gets the values from a form and returns a tuple of the values
+# Inserts an empty string if the key does not exist
+#   request: flask request object
+#   values: tuple of keys in the request
+def get_form_values(request, values):
+	return_values = tuple()
+	for value in values:
+		try:
+			return_values += (request.form[value],)
+		except KeyError:
+			return_values += ('',)
+	return return_values
+
 
 # Sends the PDF given the sheet number
 @app.route("/sheet/<number>")
@@ -41,7 +54,7 @@ def home():
 		file = request.files['song']
 		print("Received data: %s" % request.form)
 		if file and is_wav_file(file.filename):
-			title = request.form['title']
+			title, bpm = get_form_values(request, ('title', 'bpm'))
 			filename = str(randint(0, 100000000))
 			file.save(os.path.join(app.config['INPUT_FOLDER'], '%s.wav' % filename))
 			ws = WhistleSheet(filename)
