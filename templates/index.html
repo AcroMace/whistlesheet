@@ -7,23 +7,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
   </head>
   <body>
-    <div class="jumbotron">
-      <h1 id="title">WhistleSheet</h1>
-    </div>
+
     <div class="container">
-      <table class="table">
-        <tr><td>BPM</td><td><input type=number value=135 name=bpm></td></tr>
-        <tr><td>Octave</td><td><input type=number value=5 name=octave></td></tr>
-        <tr>
-          <td>Record</td>
-          <td>
-            <div id="record-button" class="btn btn-default btn-danger">Record</div>
-            <div id="convert-button" class="btn btn-default btn-success">Convert</div>
-          </td>
-        </tr>
-      </table>
+      <div id="header">
+        <h1 id="title">WhistleSheet</h1>
+      </div>
+      <div id="title-container">
+        <h2>Title</h2>
+        <input type=text placeholder="My Masterpiece" name=octave>
+      </div>
+      <br>
+      <div id="bpm-container">
+        <h2>BPM</h2>
+        <input type=number value=135 name=bpm>
+      </div>
+      <br>
+      <br>
+      <div id="record-container">
+        <h2>Record</h2>
+        <div id="record-button" class="btn btn-default btn-danger">Record</div>
+        <div id="convert-button" class="btn btn-default btn-success">Convert</div>
+      </div>
       <br>
     </div>
+    <link href='http://fonts.googleapis.com/css?family=Bitter|Lobster' rel='stylesheet' type='text/css'>
     <script type="text/javascript" src="static/js/jquery-2.1.1.min.js"></script>
     <script type="text/javascript" src="static/js/recorderjs/recorder.js"></script>
     <script type="text/javascript" src="static/js/application.js"></script>

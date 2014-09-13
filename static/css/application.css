@@ -1,3 +1,16 @@
-#audio-submit input {
-	float: left;
+
+body, h1, h2 {
+	font-family: 'Bitter', serif;
+	color: #ecf0f1;
+	background-color: #2c3e50;
+}
+
+#header h1 {
+	font-size: 4em;
+	font-family: 'Lobster', cursive;
+	text-align: center;
+}
+
+input {
+	width: 100%;
 }
