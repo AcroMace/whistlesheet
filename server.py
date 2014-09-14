@@ -69,6 +69,15 @@ def home():
 	return render_template('index.html')
 
 
+@app.errorhandler(404)
+def page_not_found(e):
+	return render_template('error.html'), 404
+
+@app.errorhandler(500)
+def application_error(e):
+	return render_template('error.html'), 500
+
+
 if __name__ == '__main__':
 	setup_directories()
 	app.run()
