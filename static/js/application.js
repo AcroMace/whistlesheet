@@ -4,6 +4,8 @@ window.AudioContext = window.AudioContext || window.webkitAudioContext;
 var audioContext = new AudioContext();
 var audioRecorder = null;
 var isRecording = false;
+var recordButton = $('#record-button');
+var convertButton = $('#convert-button');
 
 
 // Gets the value from the input given the id of the input
@@ -17,6 +19,26 @@ function getValueFromInput(input_id, default_val) {
 		value = $(input_id).attr("placeholder") || default_val;
 	}
 	return value;
+}
+
+
+// Enables/disables a button given a jQuery selector
+//   button: jQuery selector of a button
+
+function buttonIsEnabled(button) {
+	return !button.attr('disabled');
+}
+
+function enableButton(button) {
+	if (!buttonIsEnabled(button)) {
+		button.removeAttr('disabled');
+	}
+}
+
+function disableButton(button) {
+	if (buttonIsEnabled(button)) {
+		button.attr('disabled', 'disabled');
+	}
 }
 
 
@@ -61,11 +83,13 @@ function toggleRecording() {
 	if (!audioRecorder) {
         return;
 	} else if (isRecording) {
-        console.log("Stopping recording");
+        recordButton.html("<h3>Record</h3>");
+        enableButton(convertButton);
         isRecording = false;
         audioRecorder.stop();
     } else {
-        console.log("Starting recording");
+        recordButton.html("<h3>Stop Recording</h3>");
+        disableButton(convertButton);
         isRecording = true;
         audioRecorder.clear();
         audioRecorder.record();
@@ -78,6 +102,7 @@ function gotStream(stream) {
     var audioInput = audioContext.createMediaStreamSource(stream);
     audioInput.connect(inputPoint);
     audioRecorder = new Recorder(inputPoint);
+    enableButton(recordButton);
 }
 
 // Called when a user presses the record button
@@ -97,9 +122,9 @@ function displayUnsupportedBrowser() {
 
 
 window.onload = function init() {
-	// Button event bindings
-	$('#record-button').click(record);
-	$('#convert-button').click(convert);
+	// Button event bindings and initial disabling
+	recordButton.click(record).attr('disabled', 'disabled');
+	convertButton.click(convert).attr('disabled', 'disabled');
 	// Checks that getUserMedia is supported, raises an error if not
 	if (!navigator.getUserMedia) {
         navigator.getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia;

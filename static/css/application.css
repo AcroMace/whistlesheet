@@ -14,3 +14,28 @@ body, h1, h2 {
 input {
 	width: 100%;
 }
+
+.btn-record {
+	width: 100%;
+	height: 5em;
+}
+
+.btn-record h3 {
+	margin-top: 0.6em;
+}
+
+#record-button {
+	background-color: #e74c3c;
+}
+
+#record-button:hover {
+	background-color: #c0392b;
+}
+
+#convert-button {
+	background-color: #2ecc71;
+}
+
+#convert-button:hover {
+	background-color: #27ae60;
+}

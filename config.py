@@ -30,5 +30,5 @@ BPM       = 135 # Default BPM, affects CHUNK with set_bpm()
 #
 # Output config
 #
-DEFAULT_TITLE    = 'WhistleSheet' # Title of the song
-DEFAULT_COMPOSER = 'Beethoven'    # Composer of the song
+DEFAULT_TITLE    = 'Whistle Sonata No. 1' # Title of the song
+DEFAULT_COMPOSER = 'Ludwig van Beethoven' # Composer of the song
