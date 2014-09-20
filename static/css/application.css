@@ -5,6 +5,13 @@ body, h1, h2 {
 	background-color: #2c3e50;
 }
 
+.container {
+	margin-left: 10%;
+	margin-right: 10%;
+	margin-top: 1em;
+	margin-bottom: 1em;
+}
+
 #title-container h1 {
 	font-size: 4em;
 	font-family: 'Lobster', cursive;
@@ -15,13 +22,23 @@ input {
 	width: 100%;
 }
 
+#record-button-container {
+	padding-left: 0;
+	padding-right: 4px;
+}
+
+#convert-button-container {
+	padding-right: 0;
+	padding-right: 4px;
+}
+
 .btn-record {
 	width: 100%;
-	height: 5em;
+	height: 4em;
 }
 
 .btn-record h3 {
-	margin-top: 0.6em;
+	margin-top: 0.32em;
 }
 
 #record-button {

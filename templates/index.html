@@ -8,36 +8,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
   </head>
   <body>
-
     <div class="container">
       <div id="title-container">
         <h1 id="title">WhistleSheet</h1>
       </div>
-      <div id="header-container">
+      <br>
+      <div id="error-container"></div>
+      <div id="header-container" class="form-group">
         <h2>Title</h2>
         <p>Write a name for your masterpiece!</p>
-        <input id="input-title" type=text placeholder="Whistle Sonata No. 1" name=octave>
+        <input id="input-title" class="form-control" type=text placeholder="Whistle Sonata No. 1" name=octave>
         <br><br>
         <h2>Composer</h2>
         <p>What's your name?</p>
-        <input id="input-composer" type=text placeholder="Ludwig van Beethoven" name=octave>
+        <input id="input-composer" class="form-control" type=text placeholder="Ludwig van Beethoven" name=octave>
       </div>
       <br>
-      <div id="bpm-container">
+      <div id="bpm-container" class="form-group">
         <h2>BPM</h2>
-        <input id="input-bpm" type=number value=135 name=bpm>
+        <input id="input-bpm" class="form-control" type=number value=135 name=bpm>
       </div>
       <br>
       <br>
       <div id="record-container">
         <h2>Record</h2>
-        <div class="col-xs-6">
+        <div id="record-button-container" class="col-xs-6">
           <div id="record-button" class="btn btn-default btn-danger btn-record"><h3>Record</h3></div>
         </div>
-        <div class="col-xs-6">
+        <div id="convert-button-container" class="col-xs-6">
           <div id="convert-button" class="btn btn-default btn-success btn-record"><h3>Convert</h3></div>
         </div>
       </div>
+      <div id="upload-container"></div>
       <br>
     </div>
     <link href='http://fonts.googleapis.com/css?family=Bitter|Lobster' rel='stylesheet' type='text/css'>
