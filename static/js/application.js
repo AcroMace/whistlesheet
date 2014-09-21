@@ -25,19 +25,19 @@ function getValueFromInput(input_id, default_val) {
 // Enables/disables a button given a jQuery selector
 //   button: jQuery selector of a button
 
-function buttonIsEnabled(button) {
-	return !button.attr('disabled');
+function elementIsEnabled(elem) {
+	return !elem.attr('disabled');
 }
 
-function enableButton(button) {
-	if (!buttonIsEnabled(button)) {
-		button.removeAttr('disabled');
+function enableElement(elem) {
+	if (!elementIsEnabled(elem)) {
+		elem.removeAttr('disabled');
 	}
 }
 
-function disableButton(button) {
-	if (buttonIsEnabled(button)) {
-		button.attr('disabled', 'disabled');
+function disableElement(elem) {
+	if (elementIsEnabled(elem)) {
+		elem.attr('disabled', 'disabled');
 	}
 }
 
@@ -84,12 +84,12 @@ function toggleRecording() {
         return;
 	} else if (isRecording) {
         recordButton.html("<h3>Record</h3>");
-        enableButton(convertButton);
+        enableElement(convertButton);
         isRecording = false;
         audioRecorder.stop();
     } else {
         recordButton.html("<h3>Stop Recording</h3>");
-        disableButton(convertButton);
+        disableElement(convertButton);
         isRecording = true;
         audioRecorder.clear();
         audioRecorder.record();
@@ -102,7 +102,7 @@ function gotStream(stream) {
     var audioInput = audioContext.createMediaStreamSource(stream);
     audioInput.connect(inputPoint);
     audioRecorder = new Recorder(inputPoint);
-    enableButton(recordButton);
+    enableElement(recordButton);
 }
 
 // Called when a user presses the record button
@@ -117,7 +117,10 @@ function convert() {
 
 // Displays an error message for unsupported browsers
 function displayUnsupportedBrowser() {
-	alert("Your browser is not supported. Please try Chrome or Firefox.");
+	$("#error-container").html('<div class="alert" role="alert"><strong>Your browser is not supported.</strong> Please try <a href="https://www.google.com/chrome/browser/">Chrome</a> or <a href="https://www.mozilla.org/en-US/firefox/new/">Firefox</a>.</div><br>');
+	disableElement($("#input-title"));
+	disableElement($("#input-composer"));
+	disableElement($("#input-bpm"));
 }
 
 
