@@ -32,3 +32,10 @@ BPM       = 135 # Default BPM, affects CHUNK with set_bpm()
 #
 DEFAULT_TITLE    = 'Whistle Sonata No. 1' # Title of the song
 DEFAULT_COMPOSER = 'Ludwig van Beethoven' # Composer of the song
+
+#
+# Server config
+#
+INPUT_FOLDER = 'input'
+OUTPUT_FOLDER = 'output'
+LILYPOND_BIN = 'lilypond'

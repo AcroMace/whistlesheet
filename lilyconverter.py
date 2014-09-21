@@ -5,7 +5,8 @@
 
 
 from subprocess import Popen, PIPE
-from os import remove, path
+import os
+import config
 
 
 # Convert octave number to Lilypond notation
@@ -26,7 +27,7 @@ def convert_to_lilypond(notes_duration_list, SONG_ID, SONG_TITLE, SONG_COMPOSER,
 	print('Converting to Lilypond notation')
 	ONE_BAR_DURATION = 64
 	current_bar_duration = 0
-	lily_notes = open(path.join('output', '%s.ly' % SONG_ID), 'w')
+	lily_notes = open(os.path.join(config.OUTPUT_FOLDER, '%s.ly' % SONG_ID), 'w')
 	lily_notes.write('\\version "2.18.2"\n\n')
 	lily_notes.write('\\pointAndClickOff\n')
 	lily_notes.write('\\header {\n\ttitle = "%s"\n\ttagline = ""\n\tcomposer = "%s"\n}\n\n' % (SONG_TITLE, SONG_COMPOSER))
@@ -126,8 +127,10 @@ def convert_to_lilypond(notes_duration_list, SONG_ID, SONG_TITLE, SONG_COMPOSER,
 
 # Typeset the Lilypond file into a PDF
 def typeset_lilypond(SONG_ID):
-	output_directory = path.join('output', '%s.ly' % SONG_ID)
-	args = ("lilypond", "-o", "output", output_directory)
+	lilypond_bin = config.LILYPOND_BIN
+	pdf_directory = os.path.join(config.OUTPUT_FOLDER, "%s" % SONG_ID)
+	lily_directory = pdf_directory + ".ly"
+	args = (lilypond_bin, "--output=" + pdf_directory, lily_directory)
 	popen = Popen(args, stdout=PIPE)
 	popen.wait()
-	remove(output_directory)
+	os.remove(lily_directory)
