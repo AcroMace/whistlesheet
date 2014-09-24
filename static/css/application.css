@@ -58,19 +58,3 @@ input {
 .btn h3 {
 	margin-top: 0.32em;
 }
-
-#record-button {
-	background-color: #e74c3c;
-}
-
-#record-button:hover {
-	background-color: #c0392b;
-}
-
-#convert-button {
-	background-color: #2ecc71;
-}
-
-#convert-button:hover {
-	background-color: #27ae60;
-}
