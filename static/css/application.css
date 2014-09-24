@@ -62,4 +62,9 @@ input {
 
 .btn h3 {
 	margin-top: 0.32em;
+	margin-bottom: 0.32em;
+}
+
+.btn .fa {
+	margin-top: 10px;
 }
