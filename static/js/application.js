@@ -115,6 +115,12 @@ function convert() {
 	sheetify();
 };
 
+// Calle when the next button on the information screen is pressed
+function infoNext() {
+	$("#information-container").hide();
+	$("#record-container").show();
+}
+
 // Displays an error message for unsupported browsers
 function displayUnsupportedBrowser() {
 	$("#error-container").html('<div class="alert" role="alert"><strong>Your browser is not supported.</strong> Please try <a href="https://www.google.com/chrome/browser/">Chrome</a> or <a href="https://www.mozilla.org/en-US/firefox/new/">Firefox</a>.</div><br>');
@@ -128,6 +134,9 @@ window.onload = function init() {
 	// Button event bindings and initial disabling
 	recordButton.click(record).attr('disabled', 'disabled');
 	convertButton.click(convert).attr('disabled', 'disabled');
+	// Set up information next button
+	$("#record-container").hide();
+	$("#info-next-button").click(infoNext);
 	// Checks that getUserMedia is supported, raises an error if not
 	if (!navigator.getUserMedia) {
         navigator.getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia;

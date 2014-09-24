@@ -14,29 +14,31 @@
       </div>
       <br>
       <div id="error-container"></div>
-      <div id="header-container" class="form-group">
-        <h2>Title</h2>
-        <p>Write a name for your masterpiece!</p>
-        <input id="input-title" class="form-control" type=text placeholder="Whistle Sonata No. 1" name=octave>
+      <div id="information-container">
+        <div id="header-container" class="form-group">
+          <h2>Title</h2>
+          <p>Write a name for your masterpiece!</p>
+          <input id="input-title" class="form-control" type=text placeholder="Whistle Sonata No. 1" name=octave>
+          <br><br>
+          <h2>Composer</h2>
+          <p>What's your name?</p>
+          <input id="input-composer" class="form-control" type=text placeholder="Ludwig van Beethoven" name=octave>
+        </div>
+        <br>
+        <div id="bpm-container" class="form-group">
+          <h2>BPM</h2>
+          <input id="input-bpm" class="form-control" type=number value=135 name=bpm>
+        </div>
         <br><br>
-        <h2>Composer</h2>
-        <p>What's your name?</p>
-        <input id="input-composer" class="form-control" type=text placeholder="Ludwig van Beethoven" name=octave>
+        <div id="info-next-button" type="button" class="btn btn-success"><h3>Next</h3></div>
       </div>
-      <br>
-      <div id="bpm-container" class="form-group">
-        <h2>BPM</h2>
-        <input id="input-bpm" class="form-control" type=number value=135 name=bpm>
-      </div>
-      <br>
-      <br>
       <div id="record-container">
         <h2>Record</h2>
         <div id="record-button-container" class="col-xs-6">
-          <div id="record-button" class="btn btn-default btn-danger btn-record"><h3>Record</h3></div>
+          <div id="record-button" class="btn btn-danger btn-record"><h3>Record</h3></div>
         </div>
         <div id="convert-button-container" class="col-xs-6">
-          <div id="convert-button" class="btn btn-default btn-success btn-record"><h3>Convert</h3></div>
+          <div id="convert-button" class="btn btn-success btn-record"><h3>Convert</h3></div>
         </div>
       </div>
       <div id="upload-container"></div>
