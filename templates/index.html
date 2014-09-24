@@ -34,17 +34,28 @@
       </div>
       <div id="record-container">
         <h2>Record</h2>
-        <div id="record-button-container" class="col-xs-6">
-          <div id="record-button" class="btn btn-danger btn-record"><h3>Record</h3></div>
+        <div class="col-xs-6 button-left-container">
+          <div id="record-button" class="btn btn-danger"><i class="fa fa-microphone fa-lg"></i><h3>Record</h3></div>
         </div>
-        <div id="convert-button-container" class="col-xs-6">
-          <div id="convert-button" class="btn btn-success btn-record"><h3>Convert</h3></div>
+        <div class="col-xs-6 button-right-container">
+          <div id="convert-button" class="btn btn-success"><i class="fa fa-pencil fa-lg"></i><h3>Transcribe</h3></div>
         </div>
       </div>
-      <div id="upload-container"></div>
+      <div id="upload-container">
+        <h1>Transcribing...</h1>
+        <p>This will only take a moment!</p>
+      </div>
+      <div id="download-container">
+        <div class="col-xs-12 button-full-container">
+          <a id="download-link">
+            <div class="btn btn-success"><i class="fa fa-cloud-download fa-5x"></i><h3>Download</h3></div>
+          </a>
+        </div>
+      </div>
       <br>
     </div>
     <link href='http://fonts.googleapis.com/css?family=Bitter|Lobster' rel='stylesheet' type='text/css'>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
     <script type="text/javascript" src="static/js/jquery-2.1.1.min.js"></script>
     <script type="text/javascript" src="static/js/recorderjs/recorder.js"></script>
     <script type="text/javascript" src="static/js/application.js"></script>

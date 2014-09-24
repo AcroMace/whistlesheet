@@ -44,6 +44,8 @@ function disableElement(elem) {
 
 // Exports the recording as WAV and sends it to the server
 function sheetify() {
+	$("#record-container").hide();
+	$("#upload-container").show();
     audioRecorder.exportWAV(sendToServer);
 }
 
@@ -75,7 +77,10 @@ function sendToServer( blob ) {
 
 // Receives the song data from the server
 function receiveFromServer(data) {
-	window.location.replace('/sheet/' + data);
+	// window.location.replace('/sheet/' + data);
+	$('#upload-container').hide();
+	$('#download-container').show();
+	$('#download-link').attr('href', '/sheet/' + data);
 }
 
 // Stops recording if recording, starts if not
@@ -83,12 +88,12 @@ function toggleRecording() {
 	if (!audioRecorder) {
         return;
 	} else if (isRecording) {
-        recordButton.html("<h3>Record</h3>");
+        recordButton.html('<i class="fa fa-microphone fa-lg"></i><h3>Record</h3>');
         enableElement(convertButton);
         isRecording = false;
         audioRecorder.stop();
     } else {
-        recordButton.html("<h3>Stop Recording</h3>");
+        recordButton.html('<i class="fa fa-microphone fa-lg"></i><h3>Stop Recording</h3>');
         disableElement(convertButton);
         isRecording = true;
         audioRecorder.clear();
@@ -117,16 +122,23 @@ function convert() {
 
 // Calle when the next button on the information screen is pressed
 function infoNext() {
-	$("#information-container").hide();
-	$("#record-container").show();
+	$('#information-container').hide();
+	$('#record-container').show();
 }
 
 // Displays an error message for unsupported browsers
 function displayUnsupportedBrowser() {
-	$("#error-container").html('<div class="alert" role="alert"><strong>Your browser is not supported.</strong> Please try <a href="https://www.google.com/chrome/browser/">Chrome</a> or <a href="https://www.mozilla.org/en-US/firefox/new/">Firefox</a>.</div><br>');
-	disableElement($("#input-title"));
-	disableElement($("#input-composer"));
-	disableElement($("#input-bpm"));
+	$('#error-container').html('<div class="alert" role="alert"><strong>Your browser is not supported.</strong> Please try <a href="https://www.google.com/chrome/browser/">Chrome</a> or <a href="https://www.mozilla.org/en-US/firefox/new/">Firefox</a>.</div><br>');
+	disableElement($('#input-title'));
+	disableElement($('#input-composer'));
+	disableElement($('#input-bpm'));
+}
+
+// Initially hides all the other containers from the page
+function hideInitialContainers() {
+	$('#record-container').hide();
+	$('#upload-container').hide();
+	$('#download-container').hide();
 }
 
 
@@ -135,8 +147,8 @@ window.onload = function init() {
 	recordButton.click(record).attr('disabled', 'disabled');
 	convertButton.click(convert).attr('disabled', 'disabled');
 	// Set up information next button
-	$("#record-container").hide();
-	$("#info-next-button").click(infoNext);
+	hideInitialContainers();
+	$('#info-next-button').click(infoNext);
 	// Checks that getUserMedia is supported, raises an error if not
 	if (!navigator.getUserMedia) {
         navigator.getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
