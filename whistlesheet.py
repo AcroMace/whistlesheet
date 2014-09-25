@@ -256,7 +256,8 @@ class WhistleSheet:
 				ndl_new.append([cur_note, cur_octave, cur_length + next_length])
 				# Overwrite the checked note
 				ndl[n + 1][0] = 'n'
-		del ndl_new[0]
+		if len(ndl_new) > 0:
+			del ndl_new[0]
 		self.notes_duration_list = ndl_new
 
 
